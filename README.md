@@ -4,5 +4,5 @@
 
 | Name Surname (initials) | GUID                                     |
 | ----------------------- | ---------------------------------------- |
-| Wojciech Florczak (WF)  | `{FD9D086C-532F-4AAC-BB99-69D7798837D8}` |
-| Mikołaj Zakrzewski (MZ) | `{44FBFCF5-4430-4964-878D-1867DC679E0D}` |
+| Wojciech Florczak (WF)  | `{0FC5D32D-A203-402D-8A52-C0264A4D1A18}` |
+| Mikołaj Zakrzewski (MZ) | `{48CF920F-FB83-446F-BF5D-0785B6E16D84}` |
