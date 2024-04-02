@@ -4,7 +4,7 @@
     {
         private int _x;
         private int _y;
-        private int _radius;
+        private readonly int _radius;
 
         public Ball(int x, int y, int radius)
         {
@@ -28,7 +28,12 @@
         public int Radius
         {
             get => _radius;
-            set => _radius = value;
+        }
+
+        public void Move(int x, int y)
+        {
+            _x = x;
+            _y = y;
         }
     }
 }
