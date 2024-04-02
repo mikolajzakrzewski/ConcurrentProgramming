@@ -8,12 +8,12 @@ namespace Logic
 {
     public abstract class LogicAPI
     {
-        public abstract void CreateBalls(int number);
+        public abstract void CreateBalls(int number, int radius);
 
         public abstract void Start();
 
         public abstract List<List<int>> GetBallPositions();
 
-        public abstract void ResetBoard();
+        public abstract void ResetTable();
     }
 }

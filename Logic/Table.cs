@@ -10,7 +10,7 @@ namespace Logic
     {
         private readonly int _width;
         private readonly int _height;
-        private List<Ball> _balls;
+        private readonly List<Ball> _balls;
 
         public Table(int width, int height)
         {
@@ -32,22 +32,18 @@ namespace Logic
         public List<Ball> Balls
         {
             get => _balls;
-            set => _balls = value;
         }
 
-        public void AddBall(Ball ball)
+        public override void CreateBalls(int number, int radius)
         {
-            _balls.Add(ball);
-        }
-
-        public void RemoveBall(Ball ball)
-        {
-            _balls.Remove(ball);
-        }
-
-        public override void CreateBalls(int number)
-        {
-            throw new NotImplementedException();
+            for (int i = 0; i < number; i++)
+            {
+                var rand = new Random();
+                int x = rand.Next(0, _width);
+                int y = rand.Next(0, _height);
+                Ball ball = new Ball(x, y, radius);
+                _balls.Add(ball);
+            }
         }
 
         public override void Start()
@@ -57,12 +53,19 @@ namespace Logic
 
         public override List<List<int>> GetBallPositions()
         {
-            throw new NotImplementedException();
+            List<List<int>> positions = new List<List<int>>();
+            for (int i = 0; i < _balls.Count; i++)
+            {
+                List<int> position = new List<int>();
+                position.Add(_balls[i].X);
+                position.Add(_balls[i].Y);
+            }
+            return positions;
         }
 
-        public override void ResetBoard()
+        public override void ResetTable()
         {
-            throw new NotImplementedException();
+            _balls.Clear();
         }
     }
 }
