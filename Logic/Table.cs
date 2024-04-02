@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    internal class Table
+    internal class Table : LogicAPI
     {
         private readonly int _width;
         private readonly int _height;
@@ -43,6 +43,26 @@ namespace Logic
         public void RemoveBall(Ball ball)
         {
             _balls.Remove(ball);
+        }
+
+        public override void CreateBalls(int number)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Start()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<List<int>> GetBallPositions()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ResetBoard()
+        {
+            throw new NotImplementedException();
         }
     }
 }
