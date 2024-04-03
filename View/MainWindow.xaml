@@ -5,8 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+        Title="Kule" Height="450" Width="800">
+    <Grid Background="Azure">
+        <Button Content="STOP" 
+                HorizontalAlignment="Left" 
+                Margin="5, 200" 
+                VerticalAlignment="Top" 
+                Command="{Binding Stop}"
+                Background="RED"
+                Width="50"/>
+        
+        <Button Content="START"
+                HorizontalAlignment="Left" 
+                Margin="5, 170" 
+                VerticalAlignment="Top" 
+                Command="{Binding Start}"
+                Background="LightGreen"
+                Width="50"/>
+        
+        <Label Content="Podaj liczbe kul:"
+               FontSize="20"
+               HorizontalAlignment="Left"
+               Margin="5"
+               VerticalAlignment="Top"/>
+        
+        <TextBox FontSize="20"
+                 HorizontalAlignment="Left"
+                 Margin="10, 50"
+                 Text="{Binding BallsAmount}"
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top"
+                 Width="120"/>
+        
+        <ItemsControl
+            Height="420"
+            ItemsSource="{Binding Balls}"
+            Margin="190,7,20,7">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Background="DarkGreen" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding x}" />
+                    <Setter Property="Canvas.Top" Value="{Binding y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Path Fill="LightSkyBlue">
+                        <Path.Data>
+                            <EllipseGeometry
+                                RadiusX="{Binding radius}"
+                                RadiusY="{Binding radius}"/>
+                        </Path.Data>
+                    </Path>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Window>
