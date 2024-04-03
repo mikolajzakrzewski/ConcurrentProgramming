@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    internal class Model : ModelAPI
+    public class Model : ModelAPI
     {
         private readonly Table table;
+        private readonly ObservableCollection<BallModel> balls;
+
         public override int Width => table.Width;
 
         public override int Height => table.Height;
@@ -18,6 +20,11 @@ namespace Model
         public override void CreateBalls(int number, int radius)
         {
             table.CreateBalls(number, radius);
+            for (int i = 0; i < table.Balls.Count; i++)
+            {
+                BallModel ball = new BallModel(table.Balls[i].X, table.Balls[i].Y, table.Balls[i].Radius);
+                balls.Add(ball);
+            }
         }
 
         public override void Start()
@@ -28,6 +35,7 @@ namespace Model
         public override void ResetTable()
         {
             table.ResetTable();
+            balls.Clear();
         }
     }
 }
