@@ -12,7 +12,7 @@ namespace Logic
 
         public abstract void Start();
 
-        public abstract List<List<int>> GetBallPositions();
+        public abstract List<List<float>> GetBallPositions();
 
         public abstract void ResetTable();
     }

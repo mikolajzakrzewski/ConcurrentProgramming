@@ -39,8 +39,8 @@ namespace Logic
             for (int i = 0; i < number; i++)
             {
                 var rand = new Random();
-                int x = rand.Next(0, _width);
-                int y = rand.Next(0, _height);
+                float x = rand.Next(0, _width);
+                float y = rand.Next(0, _height);
                 Ball ball = new Ball(x, y, radius);
                 _balls.Add(ball);
             }
@@ -51,12 +51,12 @@ namespace Logic
             throw new NotImplementedException();
         }
 
-        public override List<List<int>> GetBallPositions()
+        public override List<List<float>> GetBallPositions()
         {
-            List<List<int>> positions = new List<List<int>>();
+            List<List<float>> positions = new List<List<float>>();
             for (int i = 0; i < _balls.Count; i++)
             {
-                List<int> position = new List<int>();
+                List<float> position = new List<float>();
                 position.Add(_balls[i].X);
                 position.Add(_balls[i].Y);
             }
