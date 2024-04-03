@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    internal class Table : LogicAPI
+    public class Table : LogicAPI
     {
         private readonly int _width;
         private readonly int _height;

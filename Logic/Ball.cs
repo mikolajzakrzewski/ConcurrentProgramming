@@ -30,8 +30,12 @@
             get => _radius;
         }
 
-        public void Move(int x, int y)
+        public async Task Move(int x, int y, double velocity)
         {
+            int xDiff = Math.Abs(_x - x);
+            int yDiff = Math.Abs(_y - y);
+            double distanceTravelled = Math.Sqrt(Math.Pow(xDiff, 2) + Math.Pow(yDiff, 2));
+            await Task.Delay(TimeSpan.FromSeconds(distanceTravelled / velocity));
             _x = x;
             _y = y;
         }
