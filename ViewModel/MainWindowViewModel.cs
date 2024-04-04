@@ -17,6 +17,7 @@ namespace ViewModel
         public int _ballsAmount;
         public double _velocity;
         public int _radius;
+        public RelayCommand CreateBallsButtonClicked { get; set; }
         public RelayCommand StartButtonClicked { get; set; }
         public RelayCommand ResetButtonClicked { get; set; }
 
@@ -53,12 +54,25 @@ namespace ViewModel
             }
         }
 
+        private bool CanCreateBalls()
+        {
+            if (BallsAmount > 0 && Radius > 0 && Balls.Count == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public MainWindowViewModel()
         {
             modelAPI = ModelAPI.Instance();
             _width = modelAPI.Width;
             _height = modelAPI.Height;
             _balls = modelAPI.Balls;
+            CreateBallsButtonClicked = new RelayCommand(o => { CreateBalls(BallsAmount, Radius); }, o => CanCreateBalls()); 
             StartButtonClicked = new RelayCommand(o => { CreateBalls(BallsAmount, Radius); }, o => CanStart());
             ResetButtonClicked = new RelayCommand(o => { ResetTable(); }, o => CanReset());
         }
@@ -66,6 +80,7 @@ namespace ViewModel
         public void CreateBalls(int number, int radius)
         {
             modelAPI.CreateBalls(number, radius);
+            CreateBallsButtonClicked.RaiseCanExecuteChanged();
             StartButtonClicked.RaiseCanExecuteChanged();
             ResetButtonClicked.RaiseCanExecuteChanged();
         }
@@ -73,6 +88,7 @@ namespace ViewModel
         public void ResetTable()
         { 
             modelAPI.ResetTable();
+            CreateBallsButtonClicked.RaiseCanExecuteChanged();
             StartButtonClicked.RaiseCanExecuteChanged();
             ResetButtonClicked.RaiseCanExecuteChanged();
         }
@@ -91,6 +107,7 @@ namespace ViewModel
                 {
                     _ballsAmount = value;
                     OnPropertyChanged(nameof(BallsAmount));
+                    CreateBallsButtonClicked.RaiseCanExecuteChanged();
                     StartButtonClicked.RaiseCanExecuteChanged();
                     ResetButtonClicked.RaiseCanExecuteChanged();
                 }
@@ -118,6 +135,7 @@ namespace ViewModel
             {
                 _radius = value;
                 OnPropertyChanged(nameof(Radius));
+                CreateBallsButtonClicked.RaiseCanExecuteChanged();
                 StartButtonClicked.RaiseCanExecuteChanged();
             }
         }

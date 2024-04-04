@@ -12,7 +12,7 @@
     <Grid Background="Azure">
         <Button Content="STOP" 
                 HorizontalAlignment="Left" 
-                Margin="5, 270, 0, 0" 
+                Margin="5, 350, 0, 0" 
                 VerticalAlignment="Top" 
                 Command="{Binding ResetButtonClicked}"
                 Background="RED"
@@ -20,12 +20,20 @@
         
         <Button Content="START"
                 HorizontalAlignment="Left" 
-                Margin="5, 240, 0, 0" 
+                Margin="5, 300, 0, 0" 
                 VerticalAlignment="Top" 
                 Command="{Binding StartButtonClicked}"
                 Background="LightGreen"
                 Width="50"/>
-        
+
+        <Button Content="CREATE BALLS"
+                HorizontalAlignment="Left" 
+                Margin="5, 250, 0, 0" 
+                VerticalAlignment="Top" 
+                Command="{Binding CreateBallsButtonClicked}"
+                Background="PeachPuff"
+                Width="85"/>
+
         <Label Content="Podaj liczbe kul:"
                FontSize="20"
                HorizontalAlignment="Left"
