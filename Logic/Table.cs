@@ -39,8 +39,8 @@ namespace Logic
             for (int i = 0; i < number; i++)
             {
                 var rand = new Random();
-                float x = rand.Next(0, _width);
-                float y = rand.Next(0, _height);
+                float x = rand.Next(0 + radius, _width - radius);
+                float y = rand.Next(0 + radius, _height - radius);
                 Ball ball = new Ball(x, y, radius);
                 _balls.Add(ball);
             }
