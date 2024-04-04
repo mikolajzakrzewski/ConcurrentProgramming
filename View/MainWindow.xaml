@@ -12,7 +12,7 @@
     <Grid Background="Azure">
         <Button Content="STOP" 
                 HorizontalAlignment="Left" 
-                Margin="5, 200" 
+                Margin="5, 270, 0, 0" 
                 VerticalAlignment="Top" 
                 Command="{Binding ResetButtonClicked}"
                 Background="RED"
@@ -20,7 +20,7 @@
         
         <Button Content="START"
                 HorizontalAlignment="Left" 
-                Margin="5, 170" 
+                Margin="5, 240, 0, 0" 
                 VerticalAlignment="Top" 
                 Command="{Binding StartButtonClicked}"
                 Background="LightGreen"
@@ -37,6 +37,20 @@
                HorizontalAlignment="Left"
                Margin="5,84,0,0"
                VerticalAlignment="Top"/>
+
+        <Label Content="Podaj promień:"
+               FontSize="20"
+               HorizontalAlignment="Left"
+               Margin="5,160,0,0"
+               VerticalAlignment="Top"/>
+
+        <TextBox FontSize="20"
+             HorizontalAlignment="Left"
+             Margin="10, 200, 0, 0"
+             Text="{Binding Radius}"
+             TextWrapping="Wrap"
+             VerticalAlignment="Top"
+             Width="120"/>
 
         <TextBox FontSize="20"
                  HorizontalAlignment="Left"
