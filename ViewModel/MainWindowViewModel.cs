@@ -14,8 +14,8 @@ namespace ViewModel
         private readonly ModelAPI modelAPI;
         private readonly int _width;
         private readonly int _height;
-        public int _ballsAmount = 0;
-        public double _velocity = 0;
+        public int _ballsAmount;
+        public double _velocity;
         public RelayCommand StartButtonClicked { get; set; }
         public RelayCommand ResetButtonClicked { get; set; }
 
@@ -42,7 +42,7 @@ namespace ViewModel
 
         private bool CanReset()
         {
-            if (BallsAmount > 0)
+            if (Balls.Count > 0)
             {
                 return true;
             }

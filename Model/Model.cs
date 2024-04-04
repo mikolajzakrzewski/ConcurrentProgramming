@@ -10,7 +10,7 @@ namespace Model
 {
     public class Model : ModelAPI
     {
-        private readonly Table table;
+        private readonly Table table = LogicAPI.Instance();
         private readonly ObservableCollection<BallModel> balls;
 
         public override int Width => table.Width;

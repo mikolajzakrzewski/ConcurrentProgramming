@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:View" xmlns:viewmodel="clr-namespace:ViewModel;assembly=ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="Balls" Height="450" Width="800">
+    <Window.DataContext>
+        <viewmodel:MainWindowViewModel/>
+    </Window.DataContext>
     <Grid Background="Azure">
         <Button Content="STOP" 
                 HorizontalAlignment="Left" 
@@ -50,11 +53,11 @@
                  TextWrapping="Wrap"
                  VerticalAlignment="Top"
                  Width="120"/>
-        
+
         <ItemsControl
-            Height="420"
-            ItemsSource="{Binding Balls}"
-            Margin="190,7,20,7">
+    Height="420"
+    ItemsSource="{Binding Balls}"
+    Margin="190,7,20,7">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Background="DarkGreen" />
@@ -71,8 +74,8 @@
                     <Path Fill="LightSkyBlue">
                         <Path.Data>
                             <EllipseGeometry
-                                RadiusX="{Binding radius}"
-                                RadiusY="{Binding radius}"/>
+                        RadiusX="{Binding radius}"
+                        RadiusY="{Binding radius}"/>
                         </Path.Data>
                     </Path>
                 </DataTemplate>
