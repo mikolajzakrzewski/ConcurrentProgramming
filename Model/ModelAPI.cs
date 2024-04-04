@@ -2,6 +2,10 @@
 {
     public abstract class ModelAPI
     {
+        public static ModelAPI Instance()
+        {
+            return new Model();
+        }
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract void CreateBalls(int number, int radius);
