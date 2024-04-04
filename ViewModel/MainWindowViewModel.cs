@@ -19,7 +19,7 @@ namespace ViewModel
         public RelayCommand StartButtonClicked { get; set; }
         public RelayCommand ResetButtonClicked { get; set; }
 
-        private ObservableCollection<BallModel> _balls;
+        public ObservableCollection<BallModel> _balls;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -58,7 +58,7 @@ namespace ViewModel
             _width = modelAPI.Width;
             _height = modelAPI.Height;
             _balls = modelAPI.Balls;
-            StartButtonClicked = new RelayCommand(o => { CreateBalls(BallsAmount, 2); }, o => CanStart());
+            StartButtonClicked = new RelayCommand(o => { CreateBalls(BallsAmount, (int)Velocity); }, o => CanStart());
             ResetButtonClicked = new RelayCommand(o => { ResetTable(); }, o => CanReset());
         }
 
@@ -76,18 +76,9 @@ namespace ViewModel
             ResetButtonClicked.RaiseCanExecuteChanged();
         }
 
-        // nwm czy potrzebne
         public ObservableCollection<BallModel> Balls
         {
             get { return _balls; }
-            set
-            {
-                if (_balls != value)
-                {
-                    _balls = value;
-                    OnPropertyChanged(nameof(Balls));
-                }
-            }
         }
 
         public int BallsAmount

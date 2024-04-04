@@ -10,7 +10,7 @@ namespace Logic
     {
         public static Table Instance()
         {
-            return new Table(10000, 10000);
+            return new Table(780, 420);
         }
 
         public abstract void CreateBalls(int number, int radius);
