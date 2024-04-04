@@ -11,7 +11,7 @@ namespace Model
     public class Model : ModelAPI
     {
         private readonly Table table = LogicAPI.Instance();
-        private readonly ObservableCollection<BallModel> balls;
+        private readonly ObservableCollection<BallModel> _balls = new ObservableCollection<BallModel>();
 
         public override int Width => table.Width;
 
@@ -23,7 +23,7 @@ namespace Model
             for (int i = 0; i < table.Balls.Count; i++)
             {
                 BallModel ball = new BallModel(table.Balls[i].X, table.Balls[i].Y, table.Balls[i].Radius);
-                balls.Add(ball);
+                _balls.Add(ball);
             }
         }
 
@@ -35,7 +35,9 @@ namespace Model
         public override void ResetTable()
         {
             table.ResetTable();
-            balls.Clear();
+            _balls.Clear();
         }
+
+        public override ObservableCollection<BallModel> Balls => _balls;
     }
 }

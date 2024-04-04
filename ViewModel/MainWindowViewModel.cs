@@ -19,7 +19,7 @@ namespace ViewModel
         public RelayCommand StartButtonClicked { get; set; }
         public RelayCommand ResetButtonClicked { get; set; }
 
-        private readonly ObservableCollection<BallModel> _balls;
+        private ObservableCollection<BallModel> _balls;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -30,7 +30,7 @@ namespace ViewModel
 
         private bool CanStart()
         {
-            if (BallsAmount > 0 && Velocity > 0)
+            if (BallsAmount > 0 && Velocity > 0 && Balls.Count == 0)
             {
                 return true;
             }
@@ -57,14 +57,37 @@ namespace ViewModel
             modelAPI = ModelAPI.Instance();
             _width = modelAPI.Width;
             _height = modelAPI.Height;
-            _balls = new ObservableCollection<BallModel>();
-            StartButtonClicked = new RelayCommand(o => { modelAPI.Start(); }, o => CanStart());
-            ResetButtonClicked = new RelayCommand(o => { modelAPI.ResetTable(); }, o => CanReset());
+            _balls = modelAPI.Balls;
+            StartButtonClicked = new RelayCommand(o => { CreateBalls(BallsAmount, 2); }, o => CanStart());
+            ResetButtonClicked = new RelayCommand(o => { ResetTable(); }, o => CanReset());
         }
 
+        public void CreateBalls(int number, int radius)
+        {
+            modelAPI.CreateBalls(number, radius);
+            StartButtonClicked.RaiseCanExecuteChanged();
+            ResetButtonClicked.RaiseCanExecuteChanged();
+        }
+
+        public void ResetTable()
+        { 
+            modelAPI.ResetTable();
+            StartButtonClicked.RaiseCanExecuteChanged();
+            ResetButtonClicked.RaiseCanExecuteChanged();
+        }
+
+        // nwm czy potrzebne
         public ObservableCollection<BallModel> Balls
         {
             get { return _balls; }
+            set
+            {
+                if (_balls != value)
+                {
+                    _balls = value;
+                    OnPropertyChanged(nameof(Balls));
+                }
+            }
         }
 
         public int BallsAmount

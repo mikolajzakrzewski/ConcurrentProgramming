@@ -46,5 +46,10 @@ namespace Model
                 OnPropertyChanged("Y");
             }
         }
+
+        public int Radius
+        {
+            get => _radius;
+        }
     }
 }
