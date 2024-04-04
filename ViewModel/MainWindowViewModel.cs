@@ -14,10 +14,10 @@ namespace ViewModel
         private readonly ModelAPI modelAPI;
         private readonly int _width;
         private readonly int _height;
-        public int _ballsAmount;
-        public double _velocity;
-        public ICommand StartButtonClicked { get; set; }
-        public ICommand ResetButtonClicked { get; set; }
+        public int _ballsAmount = 0;
+        public double _velocity = 0;
+        public RelayCommand StartButtonClicked { get; set; }
+        public RelayCommand ResetButtonClicked { get; set; }
 
         private readonly ObservableCollection<BallModel> _balls;
 
@@ -42,7 +42,14 @@ namespace ViewModel
 
         private bool CanReset()
         {
-            return true;
+            if (BallsAmount > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public MainWindowViewModel()
@@ -50,7 +57,6 @@ namespace ViewModel
             modelAPI = ModelAPI.Instance();
             _width = modelAPI.Width;
             _height = modelAPI.Height;
-            BallsAmount = 0;
             _balls = new ObservableCollection<BallModel>();
             StartButtonClicked = new RelayCommand(o => { modelAPI.Start(); }, o => CanStart());
             ResetButtonClicked = new RelayCommand(o => { modelAPI.ResetTable(); }, o => CanReset());
@@ -70,6 +76,8 @@ namespace ViewModel
                 {
                     _ballsAmount = value;
                     OnPropertyChanged(nameof(BallsAmount));
+                    StartButtonClicked.RaiseCanExecuteChanged();
+                    ResetButtonClicked.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -83,6 +91,7 @@ namespace ViewModel
                 {
                     _velocity = value;
                     OnPropertyChanged(nameof(Velocity));
+                    StartButtonClicked.RaiseCanExecuteChanged();
                 }
             }
         }
