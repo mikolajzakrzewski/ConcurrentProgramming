@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
-using Logic;
+using System.Windows.Input;
 using Model;
 
 namespace ViewModel
@@ -16,17 +16,44 @@ namespace ViewModel
         private readonly int _height;
         public int _ballsAmount;
         public double _velocity;
+        public ICommand StartButtonClicked { get; set; }
+        public ICommand ResetButtonClicked { get; set; }
+
         private readonly ObservableCollection<BallModel> _balls;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public MainWindowViewModel(BallModel ball)
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private bool CanStart()
+        {
+            if (BallsAmount > 0 && Velocity > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool CanReset()
+        {
+            return true;
+        }
+
+        public MainWindowViewModel()
         {
             modelAPI = ModelAPI.Instance();
             _width = modelAPI.Width;
             _height = modelAPI.Height;
             BallsAmount = 0;
             _balls = new ObservableCollection<BallModel>();
+            StartButtonClicked = new RelayCommand(o => { modelAPI.Start(); }, o => CanStart());
+            ResetButtonClicked = new RelayCommand(o => { modelAPI.ResetTable(); }, o => CanReset());
         }
 
         public ObservableCollection<BallModel> Balls
@@ -58,11 +85,6 @@ namespace ViewModel
                     OnPropertyChanged(nameof(Velocity));
                 }
             }
-        }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
