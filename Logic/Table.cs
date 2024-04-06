@@ -46,9 +46,18 @@ namespace Logic
             }
         }
 
-        public override void Start()
+        public override async Task Start(double velocity)
         {
-            throw new NotImplementedException();
+            var rand = new Random();
+            foreach (var ball in _balls)
+            {
+                while (true)
+                {
+                    float newX = rand.Next(0 + ball.Radius, _width - ball.Radius);
+                    float newY = rand.Next(0 + ball.Radius, _height - ball.Radius);
+                    await ball.Move(newX, newY, velocity);
+                }
+            }
         }
 
         public override List<List<float>> GetBallPositions()

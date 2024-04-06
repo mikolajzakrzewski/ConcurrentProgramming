@@ -31,7 +31,7 @@
             get => _radius;
         }
 
-        public async Task Move(int x, int y, double velocity)
+        public async Task Move(float x, float y, double velocity)
         {
             float xDiff = Math.Abs(_x - x);
             float yDiff = Math.Abs(_y - y);

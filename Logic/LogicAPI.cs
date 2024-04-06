@@ -8,14 +8,14 @@ namespace Logic
 {
     public abstract class LogicAPI
     {
-        public static Table Instance()
+        public static Table Instance(int width, int height)
         {
-            return new Table(780, 420);
+            return new Table(width, height);
         }
 
         public abstract void CreateBalls(int number, int radius);
 
-        public abstract void Start();
+        public abstract Task Start(double velocity);
 
         public abstract List<List<float>> GetBallPositions();
 

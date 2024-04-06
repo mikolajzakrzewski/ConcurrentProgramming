@@ -73,7 +73,7 @@ namespace ViewModel
             _height = modelAPI.Height;
             _balls = modelAPI.Balls;
             CreateBallsButtonClicked = new RelayCommand(o => { CreateBalls(BallsAmount, Radius); }, o => CanCreateBalls()); 
-            StartButtonClicked = new RelayCommand(o => { Start(); }, o => CanStart());
+            StartButtonClicked = new RelayCommand(o => { Start(Velocity); }, o => CanStart());
             ResetButtonClicked = new RelayCommand(o => { ResetTable(); }, o => CanReset());
         }
 
@@ -85,9 +85,9 @@ namespace ViewModel
             ResetButtonClicked.RaiseCanExecuteChanged();
         }
 
-        public void Start()
+        public void Start(double Velocity)
         {
-            modelAPI.Start();
+            modelAPI.Start(Velocity);
             CreateBallsButtonClicked.RaiseCanExecuteChanged();
             StartButtonClicked.RaiseCanExecuteChanged();
             ResetButtonClicked.RaiseCanExecuteChanged();

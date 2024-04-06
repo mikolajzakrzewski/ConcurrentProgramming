@@ -33,7 +33,7 @@ namespace Model
             set
             {
                 _x = value;
-                OnPropertyChanged("X");
+                OnPropertyChanged(nameof(X));
             }
         }
 
@@ -43,7 +43,7 @@ namespace Model
             set
             {
                 _y = value;
-                OnPropertyChanged("Y");
+                OnPropertyChanged(nameof(Y));
             }
         }
 
