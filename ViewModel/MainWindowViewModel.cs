@@ -30,9 +30,21 @@ namespace ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private bool CanCreateBalls()
+        {
+            if (BallsAmount > 0 && Radius > 0 && Balls.Count == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private bool CanStart()
         {
-            if (BallsAmount > 0 && Velocity > 0 && Balls.Count == 0)
+            if (Balls.Count > 0 && Velocity > 0)
             {
                 return true;
             }
@@ -54,18 +66,6 @@ namespace ViewModel
             }
         }
 
-        private bool CanCreateBalls()
-        {
-            if (BallsAmount > 0 && Radius > 0 && Balls.Count == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         public MainWindowViewModel()
         {
             modelAPI = ModelAPI.Instance();
@@ -73,7 +73,7 @@ namespace ViewModel
             _height = modelAPI.Height;
             _balls = modelAPI.Balls;
             CreateBallsButtonClicked = new RelayCommand(o => { CreateBalls(BallsAmount, Radius); }, o => CanCreateBalls()); 
-            StartButtonClicked = new RelayCommand(o => { CreateBalls(BallsAmount, Radius); }, o => CanStart());
+            StartButtonClicked = new RelayCommand(o => { Start(); }, o => CanStart());
             ResetButtonClicked = new RelayCommand(o => { ResetTable(); }, o => CanReset());
         }
 
@@ -85,12 +85,30 @@ namespace ViewModel
             ResetButtonClicked.RaiseCanExecuteChanged();
         }
 
+        public void Start()
+        {
+            modelAPI.Start();
+            CreateBallsButtonClicked.RaiseCanExecuteChanged();
+            StartButtonClicked.RaiseCanExecuteChanged();
+            ResetButtonClicked.RaiseCanExecuteChanged();
+        }
+
         public void ResetTable()
         { 
             modelAPI.ResetTable();
             CreateBallsButtonClicked.RaiseCanExecuteChanged();
             StartButtonClicked.RaiseCanExecuteChanged();
             ResetButtonClicked.RaiseCanExecuteChanged();
+        }
+
+        public int Width
+        {
+            get { return _width; }
+        }
+
+        public int Height
+        {
+            get { return _height; }
         }
 
         public ObservableCollection<BallModel> Balls
