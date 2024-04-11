@@ -1,6 +1,6 @@
 ﻿namespace Data
 {
-    public class Ball
+    public class Ball : DataAPI
     {
         private float _x;
         private float _y;
@@ -14,24 +14,24 @@
             this._radius = radius;
         }
 
-        public float X
+        public override float X
         {
             get => _x;
             set => _x = value;
         }
 
-        public float Y
+        public override float Y
         {
             get => _y;
             set => _y = value;
         }
 
-        public int Radius
+        public override int Radius
         {
             get => _radius;
         }
 
-        public async Task Move(float x, float y, double velocity)
+        public override async Task Move(float x, float y, double velocity)
         {
             float xDiff = Math.Abs(_x - x);
             float yDiff = Math.Abs(_y - y);

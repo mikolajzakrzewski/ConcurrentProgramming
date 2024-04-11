@@ -11,13 +11,13 @@ namespace Logic
     {
         private readonly int _width;
         private readonly int _height;
-        private readonly List<Ball> _balls;
+        private readonly List<DataAPI> _balls;
 
         public Table(int width, int height)
         {
             this._width = width;
             this._height = height;
-            this._balls = new List<Ball>();
+            this._balls = new List<DataAPI>();
         }
 
         public int Width
@@ -30,7 +30,7 @@ namespace Logic
             get => _height;
         }
 
-        public List<Ball> Balls
+        public List<DataAPI> Balls
         {
             get => _balls;
         }
@@ -42,7 +42,7 @@ namespace Logic
                 var rand = new Random();
                 float x = rand.Next(0 + radius, _width - radius);
                 float y = rand.Next(0 + radius, _height - radius);
-                Ball ball = new Ball(x, y, radius);
+                DataAPI ball = DataAPI.Instance(x, y, radius);
                 _balls.Add(ball);
             }
         }
