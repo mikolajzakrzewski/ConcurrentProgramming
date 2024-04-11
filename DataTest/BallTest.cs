@@ -1,6 +1,6 @@
 using Data;
 
-namespace LogicTest
+namespace DataTest
 {
     [TestClass]
     public class BallTest
@@ -8,7 +8,7 @@ namespace LogicTest
         [TestMethod]
         public void MoveTest()
         {
-            Ball ball = new Ball(10, 10, 20);
+            DataAPI ball = DataAPI.Instance(10, 10, 20);
             Task.Run(async () =>
             {
                 await ball.Move(20, 30, 5);

@@ -13,7 +13,7 @@ namespace LogicTest
         [TestMethod]
         public void TestCreateBalls()
         {
-            Table table = new Table(1000, 1000);
+            LogicAPI table = LogicAPI.Instance(1000, 1000);
             table.CreateBalls(15, 20);
             Assert.AreEqual(15, table.Balls.Count);
         }
@@ -21,7 +21,7 @@ namespace LogicTest
         [TestMethod]
         public void TestResetTable()
         {
-            Table table = new Table(1000, 1000);
+            LogicAPI table = LogicAPI.Instance(1000, 1000);
             table.CreateBalls(15, 20);
             table.ResetTable();
             Assert.AreEqual(0, table.Balls.Count);

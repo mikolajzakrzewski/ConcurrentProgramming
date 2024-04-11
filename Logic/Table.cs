@@ -20,17 +20,17 @@ namespace Logic
             this._balls = new List<DataAPI>();
         }
 
-        public int Width
+        public override int Width
         {
             get => _width;
         }
 
-        public int Height
+        public override int Height
         {
             get => _height;
         }
 
-        public List<DataAPI> Balls
+        public override List<DataAPI> Balls
         {
             get => _balls;
         }
