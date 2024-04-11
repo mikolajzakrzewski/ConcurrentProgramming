@@ -1,4 +1,4 @@
-using Logic;
+using Data;
 
 namespace LogicTest
 {

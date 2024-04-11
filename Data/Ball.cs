@@ -1,4 +1,4 @@
-﻿namespace Logic
+﻿namespace Data
 {
     public class Ball
     {
@@ -97,7 +97,8 @@
                 distanceTravelled = Math.Sqrt(Math.Pow(Math.Abs(_x - currentX), 2) + Math.Pow(Math.Abs(_y - currentY), 2));
                 double timeOfTravel = distanceTravelled / velocity;
                 await Task.Delay(TimeSpan.FromSeconds(timeOfTravel));
-                lock(_moveLock) {
+                lock (_moveLock)
+                {
                     Console.WriteLine($"Ball moved to {currentX}, {currentY}");
                     _x = currentX;
                     _y = currentY;
