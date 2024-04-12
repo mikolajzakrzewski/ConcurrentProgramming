@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using Data;
 
 namespace Logic
@@ -49,14 +49,15 @@ namespace Logic
             }
         }
 
-        public override async Task Start(double velocity)
+        public override void Start(double velocity)
         {
             var rand = new Random();
             foreach (var ball in _balls)
             {
                 float newX = rand.Next(0 + ball.Radius, _width - ball.Radius);
                 float newY = rand.Next(0 + ball.Radius, _height - ball.Radius);
-                await ball.Move(newX, newY, velocity);
+                Thread thread = new Thread(() => { ball.Move(newX, newY, velocity); });
+                thread.Start();
             }
         }
 
@@ -106,7 +107,7 @@ namespace Logic
         public void OnNext(DataAPI value)
         {
             //Console.WriteLine($"Ball moved to {value.X}, {value.Y}");
-            // TODO: Implement on next.
+            // TODO: Implement collision detection
         }
     }
 }
