@@ -17,6 +17,7 @@ namespace ViewModel
         public int _ballsAmount;
         public double _velocity;
         public int _radius;
+        private bool _startButtonEnabled = true;
         public RelayCommand CreateBallsButtonClicked { get; set; }
         public RelayCommand StartButtonClicked { get; set; }
         public RelayCommand ResetButtonClicked { get; set; }
@@ -44,7 +45,7 @@ namespace ViewModel
 
         private bool CanStart()
         {
-            if (Balls.Count > 0 && Velocity > 0)
+            if (_startButtonEnabled && Balls.Count > 0 && Velocity > 0)
             {
                 return true;
             }
@@ -89,6 +90,7 @@ namespace ViewModel
         {
             modelAPI.Start(Velocity);
             CreateBallsButtonClicked.RaiseCanExecuteChanged();
+            _startButtonEnabled = false;
             StartButtonClicked.RaiseCanExecuteChanged();
             ResetButtonClicked.RaiseCanExecuteChanged();
         }
@@ -97,6 +99,7 @@ namespace ViewModel
         { 
             modelAPI.ResetTable();
             CreateBallsButtonClicked.RaiseCanExecuteChanged();
+            _startButtonEnabled = true;
             StartButtonClicked.RaiseCanExecuteChanged();
             ResetButtonClicked.RaiseCanExecuteChanged();
         }
