@@ -45,6 +45,7 @@ namespace Logic
                 float y = rand.Next(0 + radius, _height - radius);
                 DataAPI ball = DataAPI.Instance(x, y, radius);
                 _balls.Add(ball);
+                this.Subscribe(ball);
             }
         }
 
@@ -104,6 +105,7 @@ namespace Logic
 
         public void OnNext(DataAPI value)
         {
+            //Console.WriteLine($"Ball moved to {value.X}, {value.Y}");
             // TODO: Implement on next.
         }
     }

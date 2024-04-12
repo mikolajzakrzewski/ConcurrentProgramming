@@ -117,7 +117,7 @@ namespace Data
                 await Task.Delay(TimeSpan.FromSeconds(timeOfTravel));
                 lock (_moveLock)
                 {
-                    Console.WriteLine($"Ball moved to {currentX}, {currentY}");
+                    //Console.WriteLine($"Ball moved to {currentX}, {currentY}");
                     _x = currentX;
                     _y = currentY;
                     NotifyObservers(this);
@@ -125,7 +125,7 @@ namespace Data
             }
         }
 
-        public IDisposable Subscribe(IObserver<Ball> observer)
+        public override IDisposable Subscribe(IObserver<Ball> observer)
         {
             if (!_observers.Contains(observer))
             {

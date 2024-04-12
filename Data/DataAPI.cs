@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public abstract class DataAPI
+    public abstract class DataAPI : IObservable<Ball>
     {
         public static Ball Instance(float x, float y, int radius)
         {
@@ -20,5 +20,7 @@ namespace Data
         public abstract int Radius { get; }
 
         public abstract Task Move(float x, float y, double velocity);
+
+        public abstract IDisposable Subscribe(IObserver<Ball> observer);
     }
 }
