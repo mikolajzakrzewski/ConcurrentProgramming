@@ -7,7 +7,7 @@ using Data;
 
 namespace Logic
 {
-    public abstract class LogicAPI
+    public abstract class LogicAPI : IObservable<Table>
     {
         public static Table Instance(int width, int height)
         {
@@ -29,5 +29,6 @@ namespace Logic
         public abstract List<List<float>> GetBallPositions();
 
         public abstract void ResetTable();
+        public abstract IDisposable Subscribe(IObserver<Table> observer);
     }
 }

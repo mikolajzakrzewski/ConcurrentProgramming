@@ -7,18 +7,20 @@ using Data;
 
 namespace Logic
 {
-    public class Table : LogicAPI, IObserver<DataAPI>
+    public class Table : LogicAPI, IObserver<DataAPI>, IObservable<Table>
     {
         private readonly int _width;
         private readonly int _height;
         private readonly List<DataAPI> _balls;
         private IDisposable _subscriptionToken;
+        private List<IObserver<Table>> _observers;
 
         public Table(int width, int height)
         {
             this._width = width;
             this._height = height;
             this._balls = new List<DataAPI>();
+            this._observers = new List<IObserver<Table>>();
         }
 
         public override int Width
@@ -119,6 +121,7 @@ namespace Logic
         public void OnNext(DataAPI value)
         {
             WallCollision(value);
+            NotifyObservers(this);
         }
 
         private void WallCollision(DataAPI ball)
@@ -166,6 +169,43 @@ namespace Logic
                     ball.Y -= ball.VelocityY * timeOfExceededTravel;
                     ball.X += ball.VelocityX * timeOfExceededTravel;
                 }
+            }
+        }
+
+        public override IDisposable Subscribe(IObserver<Table> observer)
+        {
+            if (!_observers.Contains(observer))
+            {
+                _observers.Add(observer);
+            }
+            return new SubscriptionToken(_observers, observer);
+        }
+
+        public void NotifyObservers(Table table)
+        {
+            foreach (var observer in _observers)
+            {
+                observer.OnNext(table);
+            }
+        }
+    }
+
+    public class SubscriptionToken : IDisposable
+    {
+        private List<IObserver<Table>> _observers;
+        private IObserver<Table> _observer;
+
+        public SubscriptionToken(List<IObserver<Table>> observers, IObserver<Table> observer)
+        {
+            this._observers = observers;
+            this._observer = observer;
+        }
+
+        public void Dispose()
+        {
+            if (_observer != null && _observers.Contains(_observer))
+            {
+                _observers.Remove(_observer);
             }
         }
     }
