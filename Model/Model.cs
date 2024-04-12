@@ -24,6 +24,9 @@ namespace Model
             {
                 BallModel ball = new BallModel(table.Balls[i].X, table.Balls[i].Y, table.Balls[i].Radius);
                 _balls.Add(ball);
+                // TODO: replace IObserver<DataAPI> implementation
+                table.Balls[i].Subscribe(ball);
+                // end
             }
         }
 
