@@ -118,49 +118,55 @@ namespace Logic
 
         public void OnNext(DataAPI value)
         {
-            //Console.WriteLine($"Ball moved to {value.X}, {value.Y}");
-            DetectWallCollistions();
+            WallCollision(value);
         }
 
-        private void DetectWallCollistions()
+        private void WallCollision(DataAPI ball)
         {
-            for (int i = 0; i < _balls.Count; i++)
+            if (ball.X + ball.Radius > _width || ball.X - ball.Radius < 0 || ball.Y + ball.Radius > _height || ball.Y - ball.Radius < 0)
             {
-                if (_balls[i].X + _balls[i].Radius > _width || _balls[i].X - _balls[i].Radius < 0 || _balls[i].Y + _balls[i].Radius > _height || _balls[i].Y - _balls[i].Radius < 0)
+                bool hitTopOrBottom = false;
+
+                if (ball.Y - ball.Radius < 0 || ball.Y + ball.Radius > _height)
                 {
-                    WallCollistion(i);
+                    hitTopOrBottom = true;
+                }
+
+                if (hitTopOrBottom)
+                {
+                    float exceededDistance;
+                    if (ball.Y - ball.Radius < 0)
+                    {
+                        exceededDistance = (float)Math.Abs(ball.Y - ball.Radius);
+                    }
+                    else
+                    {
+                        exceededDistance = (float)Math.Abs(ball.Y + ball.Radius - _height);
+                    }
+                    ball.VelocityY *= -1;
+                    float velocity = (float)Math.Sqrt((float)Math.Pow(ball.VelocityX, 2) + (float)Math.Pow(ball.VelocityY, 2));
+                    float timeOfExceededTravel = exceededDistance / velocity;
+                    ball.X -= ball.VelocityX * timeOfExceededTravel;
+                    ball.Y += ball.VelocityY * timeOfExceededTravel;
+                }
+                else
+                {
+                    float exceededDistance;
+                    if (ball.X - ball.Radius < 0)
+                    {
+                        exceededDistance = (float)Math.Abs(ball.X - ball.Radius);
+                    }
+                    else
+                    {
+                        exceededDistance = (float)Math.Abs(ball.X + ball.Radius - _width);
+                    }
+                    ball.VelocityX *= -1;
+                    float velocity = (float)Math.Sqrt((float)Math.Pow(ball.VelocityX, 2) + (float)Math.Pow(ball.VelocityY, 2));
+                    float timeOfExceededTravel = exceededDistance / velocity;
+                    ball.Y -= ball.VelocityY * timeOfExceededTravel;
+                    ball.X += ball.VelocityX * timeOfExceededTravel;
                 }
             }
-        }
-
-        private void WallCollistion(int index)
-        {
-
-            DataAPI ball = _balls[index];
-
-            bool hitTopOrBottom = false;
-
-            if (ball.Y - ball.Radius < 0 || ball.Y + ball.Radius > _height)
-            {
-                hitTopOrBottom = true;
-            }
-
-            if (hitTopOrBottom)
-            {
-                ball.VelocityY *= -1;
-                ball.Y = Math.Clamp(ball.Y, ball.Radius, _height - ball.Radius);
-            }
-            else
-            {
-                ball.VelocityX *= -1;
-                ball.X = Math.Clamp(ball.X, ball.Radius, _width - ball.Radius);
-            }
-
-            float newX = ball.X + ball.VelocityX * 0.01f;
-            float newY = ball.Y + ball.VelocityY * 0.01f;
-
-            ball.X = newX;
-            ball.Y = newY;
         }
     }
 }

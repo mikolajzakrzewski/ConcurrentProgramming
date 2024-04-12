@@ -83,7 +83,7 @@ namespace Data
             float moveAngle = rand.Next(0, 360);
             VelocityX = velocity * (float)Math.Cos(moveAngle);
             VelocityY = velocity * (float)Math.Sin(moveAngle);
-            float timeOfTravel = 0.01f;
+            float timeOfTravel = 0.001f;
             while(true)
             {
                 float xChange = VelocityX * timeOfTravel;
@@ -91,8 +91,8 @@ namespace Data
                 await Task.Delay(TimeSpan.FromSeconds(timeOfTravel));
                 lock (_moveLock)
                 {
-                    _x = _x + xChange;
-                    _y = _y + yChange;
+                    _x += xChange;
+                    _y += yChange;
                     NotifyObservers(this);
                 }
             }
