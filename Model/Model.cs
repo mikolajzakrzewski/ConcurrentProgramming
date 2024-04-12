@@ -30,10 +30,15 @@ namespace Model
             }
         }
 
-        public override void Start(double velocity)
+        public override void Start(float velocity)
         {
             table.Start(velocity);
         }
+
+        //public override void Start(double velocity)
+        //{
+        //    table.Start(velocity);
+        //}
 
         public override void ResetTable()
         {

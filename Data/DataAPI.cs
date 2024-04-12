@@ -17,9 +17,15 @@ namespace Data
 
         public abstract float Y { get; set; }
 
+        public abstract float VelocityX { get; set; }
+
+        public abstract float VelocityY { get; set; }
+
         public abstract int Radius { get; }
 
-        public abstract Task Move(float x, float y, double velocity);
+        public abstract Task Move(float velocity);
+
+        //public abstract Task Move(float x, float y, double velocity);
 
         public abstract IDisposable Subscribe(IObserver<Ball> observer);
     }

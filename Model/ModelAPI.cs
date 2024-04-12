@@ -12,7 +12,8 @@ namespace Model
         public abstract int Height { get; }
         public abstract ObservableCollection<BallModel> Balls { get; }
         public abstract void CreateBalls(int number, int radius);
-        public abstract void Start(double velocity);
+        public abstract void Start(float velocity);
+        //public abstract void Start(double velocity);
         public abstract void ResetTable();
     }
 }

@@ -22,7 +22,9 @@ namespace Logic
 
         public abstract void CreateBalls(int number, int radius);
 
-        public abstract void Start(double velocity);
+        public abstract void Start(float velocity);
+
+        //public abstract void Start(double velocity);
 
         public abstract List<List<float>> GetBallPositions();
 
