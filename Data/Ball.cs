@@ -1,11 +1,20 @@
-﻿namespace Data
+﻿using System.ComponentModel;
+
+namespace Data
 {
-    public class Ball : DataAPI
+    public class Ball : DataAPI, INotifyPropertyChanged
     {
         private float _x;
         private float _y;
         private readonly int _radius;
         private readonly object _moveLock = new object();
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string  propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public Ball(float x, float y, int radius)
         {
@@ -17,13 +26,27 @@
         public override float X
         {
             get => _x;
-            set => _x = value;
+            set
+            {
+                if (_x != value)
+                {
+                    _x = value;
+                    OnPropertyChanged(nameof(X));
+                }
+            }
         }
 
         public override float Y
         {
             get => _y;
-            set => _y = value;
+            set
+            {
+                if (_y != value)
+                {
+                    _y = value;
+                    OnPropertyChanged(nameof(Y));
+                }
+            }
         }
 
         public override int Radius
@@ -102,6 +125,8 @@
                     Console.WriteLine($"Ball moved to {currentX}, {currentY}");
                     _x = currentX;
                     _y = currentY;
+                    OnPropertyChanged(nameof(X));
+                    OnPropertyChanged(nameof(Y));
                 }
             }
         }

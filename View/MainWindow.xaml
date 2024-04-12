@@ -79,7 +79,7 @@
         <ItemsControl
     Width="{Binding Width}"
     Height="{Binding Height}"
-    ItemsSource="{Binding Balls}"
+    ItemsSource="{Binding Balls, UpdateSourceTrigger=PropertyChanged}"
     Margin="190,7,20,7">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
