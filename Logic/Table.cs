@@ -7,11 +7,12 @@ using Data;
 
 namespace Logic
 {
-    public class Table : LogicAPI
+    public class Table : LogicAPI, IObserver<DataAPI>
     {
         private readonly int _width;
         private readonly int _height;
         private readonly List<DataAPI> _balls;
+        private IDisposable _subscriptionToken;
 
         public Table(int width, int height)
         {
@@ -76,6 +77,37 @@ namespace Logic
         public override void ResetTable()
         {
             _balls.Clear();
+        }
+
+        public void Subscribe(IObservable<DataAPI> provider)
+        {
+            if (provider != null)
+            {
+                _subscriptionToken = provider.Subscribe(this);
+            }
+        }
+
+        public void Unsubscribe()
+        {
+            if (_subscriptionToken != null)
+            {
+                _subscriptionToken.Dispose();
+            }
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(DataAPI value)
+        {
+            // TODO: Implement on next.
         }
     }
 }
