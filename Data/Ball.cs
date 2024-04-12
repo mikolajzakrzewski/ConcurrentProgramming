@@ -28,7 +28,7 @@ namespace Data
                 if (_x != value)
                 {
                     _x = value;
-                    NotifyObservers(this);
+                    //NotifyObservers(this);
                 }
             }
         }
@@ -41,7 +41,7 @@ namespace Data
                 if (_y != value)
                 {
                     _y = value;
-                    NotifyObservers(this);
+                    //NotifyObservers(this);
                 }
             }
         }
@@ -54,7 +54,7 @@ namespace Data
                 if (_velociyX != value)
                 {
                     _velociyX = value;
-                    NotifyObservers(this);
+                    //NotifyObservers(this);
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace Data
                 if (_velocityY != value)
                 {
                     _velocityY = value;
-                    NotifyObservers(this);
+                    //NotifyObservers(this);
                 }
             }
         }

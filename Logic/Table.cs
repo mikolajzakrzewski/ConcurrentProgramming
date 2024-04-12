@@ -119,7 +119,48 @@ namespace Logic
         public void OnNext(DataAPI value)
         {
             //Console.WriteLine($"Ball moved to {value.X}, {value.Y}");
-            // TODO: Implement collision detection
+            DetectWallCollistions();
+        }
+
+        private void DetectWallCollistions()
+        {
+            for (int i = 0; i < _balls.Count; i++)
+            {
+                if (_balls[i].X + _balls[i].Radius > _width || _balls[i].X - _balls[i].Radius < 0 || _balls[i].Y + _balls[i].Radius > _height || _balls[i].Y - _balls[i].Radius < 0)
+                {
+                    WallCollistion(i);
+                }
+            }
+        }
+
+        private void WallCollistion(int index)
+        {
+
+            DataAPI ball = _balls[index];
+
+            bool hitTopOrBottom = false;
+
+            if (ball.Y - ball.Radius < 0 || ball.Y + ball.Radius > _height)
+            {
+                hitTopOrBottom = true;
+            }
+
+            if (hitTopOrBottom)
+            {
+                ball.VelocityY *= -1;
+                ball.Y = Math.Clamp(ball.Y, ball.Radius, _height - ball.Radius);
+            }
+            else
+            {
+                ball.VelocityX *= -1;
+                ball.X = Math.Clamp(ball.X, ball.Radius, _width - ball.Radius);
+            }
+
+            float newX = ball.X + ball.VelocityX * 0.01f;
+            float newY = ball.Y + ball.VelocityY * 0.01f;
+
+            ball.X = newX;
+            ball.Y = newY;
         }
     }
 }
