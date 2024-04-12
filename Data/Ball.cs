@@ -1,26 +1,21 @@
-﻿using System.ComponentModel;
+﻿using System;
 
 namespace Data
 {
-    public class Ball : DataAPI, INotifyPropertyChanged
+    public class Ball : DataAPI, IObservable<Tuple<float, float>>
     {
         private float _x;
         private float _y;
         private readonly int _radius;
         private readonly object _moveLock = new object();
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string  propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        private List<IObserver<Tuple<float, float>>> _observers;
 
         public Ball(float x, float y, int radius)
         {
             this._x = x;
             this._y = y;
             this._radius = radius;
+            _observers = new List<IObserver<Tuple<float, float>>>();
         }
 
         public override float X
@@ -31,7 +26,7 @@ namespace Data
                 if (_x != value)
                 {
                     _x = value;
-                    OnPropertyChanged(nameof(X));
+                    NotifyObservers();
                 }
             }
         }
@@ -44,7 +39,7 @@ namespace Data
                 if (_y != value)
                 {
                     _y = value;
-                    OnPropertyChanged(nameof(Y));
+                    NotifyObservers();
                 }
             }
         }
@@ -125,9 +120,48 @@ namespace Data
                     Console.WriteLine($"Ball moved to {currentX}, {currentY}");
                     _x = currentX;
                     _y = currentY;
-                    OnPropertyChanged(nameof(X));
-                    OnPropertyChanged(nameof(Y));
                 }
+
+                NotifyObservers();
+            }
+        }
+
+        public IDisposable? Subscribe(IObserver<Tuple<float, float>> observer)
+        {
+            if (!_observers.Contains(observer))
+            {
+                var subscriptionToken = new SubscriptionToken(_observers, observer);
+                _observers.Add(observer);
+                return subscriptionToken;
+            }
+            return null;
+        }
+
+        private void NotifyObservers()
+        {
+            foreach (var observer in _observers)
+            {
+                observer.OnNext(new Tuple<float, float>(_x, _y));
+            }
+        }
+    }
+
+    public class SubscriptionToken : IDisposable
+    {
+        private List<IObserver<Tuple<float, float>>> _observers;
+        private IObserver<Tuple<float, float>> _observer;
+
+        public SubscriptionToken(List<IObserver<Tuple<float, float>>> observers, IObserver<Tuple<float, float>> observer)
+        {
+            _observers = observers;
+            _observer = observer;
+        }
+
+        public void Dispose()
+        {
+            if (_observer != null && _observers.Contains(_observer))
+            {
+                _observers.Remove(_observer);
             }
         }
     }
