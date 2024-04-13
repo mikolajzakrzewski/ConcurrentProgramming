@@ -6,6 +6,13 @@ namespace ModelTest
     public class ModelTest
     {
         [TestMethod]
+        public void CreateAPITest() 
+        {
+            ModelAPI modelAPI = ModelAPI.Instance();
+            Assert.IsNotNull(modelAPI);
+        }
+
+        [TestMethod]
         public void TestCreateBalls()
         {
             ModelAPI model;

@@ -11,6 +11,13 @@ namespace LogicTest
     public class TableTest
     {
         [TestMethod]
+        public void CreateAPITest()
+        {
+            LogicAPI table = LogicAPI.Instance(1000, 1000);
+            Assert.IsNotNull(table);    
+        }
+
+        [TestMethod]
         public void TestCreateBalls()
         {
             LogicAPI table = LogicAPI.Instance(1000, 1000);
