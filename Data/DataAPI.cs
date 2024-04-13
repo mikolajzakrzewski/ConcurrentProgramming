@@ -25,8 +25,6 @@ namespace Data
 
         public abstract Task Move(float velocity);
 
-        //public abstract Task Move(float x, float y, double velocity);
-
         public abstract IDisposable Subscribe(IObserver<Ball> observer);
     }
 }

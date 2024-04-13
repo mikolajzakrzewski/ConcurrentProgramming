@@ -38,11 +38,6 @@ namespace Model
             table.Start(velocity);
         }
 
-        //public override void Start(double velocity)
-        //{
-        //    table.Start(velocity);
-        //}
-
         public override void ResetTable()
         {
             table.ResetTable();

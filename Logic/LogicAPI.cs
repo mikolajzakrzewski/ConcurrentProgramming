@@ -24,8 +24,6 @@ namespace Logic
 
         public abstract void Start(float velocity);
 
-        //public abstract void Start(double velocity);
-
         public abstract List<List<float>> GetBallPositions();
 
         public abstract void ResetTable();

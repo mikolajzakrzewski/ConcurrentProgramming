@@ -51,18 +51,6 @@ namespace Logic
             }
         }
 
-        //public override void Start(double velocity)
-        //{
-        //    var rand = new Random();
-        //    foreach (var ball in _balls)
-        //    {
-        //        float newX = rand.Next(0 + ball.Radius, _width - ball.Radius);
-        //        float newY = rand.Next(0 + ball.Radius, _height - ball.Radius);
-        //        Thread thread = new Thread(() => { ball.Move(newX, newY, velocity); });
-        //        thread.Start();
-        //    }
-        //}
-
         public override void Start(float velocity)
         {
             var rand = new Random();

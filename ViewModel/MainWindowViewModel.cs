@@ -16,7 +16,6 @@ namespace ViewModel
         private readonly int _height;
         public int _ballsAmount;
         public float _velocity;
-        //public double _velocity;
         public int _radius;
         private bool _startButtonEnabled = true;
         public RelayCommand CreateBallsButtonClicked { get; set; }
@@ -96,15 +95,6 @@ namespace ViewModel
             ResetButtonClicked.RaiseCanExecuteChanged();
         }
 
-        //public void Start(double Velocity)
-        //{
-        //    modelAPI.Start(Velocity);
-        //    CreateBallsButtonClicked.RaiseCanExecuteChanged();
-        //    _startButtonEnabled = false;
-        //    StartButtonClicked.RaiseCanExecuteChanged();
-        //    ResetButtonClicked.RaiseCanExecuteChanged();
-        //}
-
         public void ResetTable()
         { 
             modelAPI.ResetTable();
@@ -158,20 +148,6 @@ namespace ViewModel
                 }
             }
         }
-
-        //public double Velocity
-        //{
-        //    get { return _velocity; }
-        //    set
-        //    {
-        //        if (value != _velocity)
-        //        {
-        //            _velocity = value;
-        //            OnPropertyChanged(nameof(Velocity));
-        //            StartButtonClicked.RaiseCanExecuteChanged();
-        //        }
-        //    }
-        //}
 
         public int Radius
         { 
