@@ -24,8 +24,6 @@ namespace Logic
 
         public abstract void Start(float velocity);
 
-        public abstract List<List<float>> GetBallPositions();
-
         public abstract void ResetTable();
 
         public abstract IDisposable Subscribe(IObserver<Table> observer);

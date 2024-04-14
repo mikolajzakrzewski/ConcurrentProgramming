@@ -103,8 +103,8 @@ namespace Data
                 {
                     _x += xChange;
                     _y += yChange;
-                    NotifyObservers(this);
                 }
+                NotifyObservers(this);
                 stopwatch.Stop();
                 float timeElapsed = (float)stopwatch.Elapsed.TotalSeconds;
                 if (timeElapsed < timeOfTravel)
