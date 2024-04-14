@@ -27,6 +27,7 @@ namespace Logic
         public abstract List<List<float>> GetBallPositions();
 
         public abstract void ResetTable();
+
         public abstract IDisposable Subscribe(IObserver<Table> observer);
     }
 }

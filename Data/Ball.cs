@@ -79,7 +79,7 @@ namespace Data
             float moveAngle = rand.Next(0, 360);
             VelocityX = velocity * (float)Math.Cos(moveAngle);
             VelocityY = velocity * (float)Math.Sin(moveAngle);
-            float timeOfTravel = 0.01f;
+            float timeOfTravel = 1f / 60f;
             while(true)
             {
                 float xChange = VelocityX * timeOfTravel;

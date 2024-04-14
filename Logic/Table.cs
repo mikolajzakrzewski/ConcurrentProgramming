@@ -12,7 +12,7 @@ namespace Logic
         private readonly int _width;
         private readonly int _height;
         private readonly List<DataAPI> _balls;
-        private IDisposable _subscriptionToken;
+        private IDisposable? _subscriptionToken;
         private List<IObserver<Table>> _observers;
 
         public Table(int width, int height)

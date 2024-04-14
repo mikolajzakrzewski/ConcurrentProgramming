@@ -12,7 +12,7 @@ namespace Model
     {
         private readonly LogicAPI table = LogicAPI.Instance(690, 420);
         private readonly ObservableCollection<BallModel> _balls = new ObservableCollection<BallModel>();
-        private IDisposable _subscriptionToken;
+        private IDisposable? _subscriptionToken;
 
         public override int Width => table.Width;
 
