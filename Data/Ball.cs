@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics;
 
 namespace Data
 {
@@ -10,6 +10,7 @@ namespace Data
         private float _velocityY;
         private readonly int _radius;
         private readonly object _moveLock = new object();
+        private readonly object _velocityLock = new object();
         private List<IObserver<Ball>> _observers;
 
         public Ball(float x, float y, int radius)
@@ -27,7 +28,10 @@ namespace Data
             {
                 if (_x != value)
                 {
-                    _x = value;
+                    lock (_moveLock)
+                    {
+                        _x = value;
+                    }
                 }
             }
         }
@@ -39,7 +43,10 @@ namespace Data
             {
                 if (_y != value)
                 {
-                    _y = value;
+                    lock (_moveLock)
+                    {
+                        _y = value;
+                    }
                 }
             }
         }
@@ -51,7 +58,10 @@ namespace Data
             {
                 if (_velociyX != value)
                 {
-                    _velociyX = value;
+                    lock (_velocityLock)
+                    {
+                        _velociyX = value;
+                    }
                 }
             }
         }
@@ -63,7 +73,10 @@ namespace Data
             {
                 if (_velocityY != value)
                 {
-                    _velocityY = value;
+                    lock (_velocityLock)
+                    {
+                        _velocityY = value;
+                    }
                 }
             }
         }
@@ -82,14 +95,25 @@ namespace Data
             float timeOfTravel = 1f / 60f;
             while(true)
             {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
                 float xChange = VelocityX * timeOfTravel;
                 float yChange = VelocityY * timeOfTravel;
-                await Task.Delay(TimeSpan.FromSeconds(timeOfTravel));
                 lock (_moveLock)
                 {
                     _x += xChange;
                     _y += yChange;
                     NotifyObservers(this);
+                }
+                stopwatch.Stop();
+                float timeElapsed = (float)stopwatch.Elapsed.TotalSeconds;
+                if (timeElapsed < timeOfTravel)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(timeOfTravel - timeElapsed));
+                }
+                else
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(0));
                 }
             }
         }

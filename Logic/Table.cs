@@ -58,8 +58,7 @@ namespace Logic
             {
                 float newX = rand.Next(0 + ball.Radius, _width - ball.Radius);
                 float newY = rand.Next(0 + ball.Radius, _height - ball.Radius);
-                Thread thread = new Thread(() => { ball.Move(velocity); });
-                thread.Start();
+                Task.Run(() => { ball.Move(velocity); });
             }
         }
 
