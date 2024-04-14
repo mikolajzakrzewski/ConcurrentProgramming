@@ -31,7 +31,7 @@ namespace ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private bool CanCreateBalls()
+        public bool CanCreateBalls()
         {
             if (BallsAmount > 0 && Radius > 0 && Balls.Count == 0)
             {
@@ -43,7 +43,7 @@ namespace ViewModel
             }
         }
 
-        private bool CanStart()
+        public bool CanStart()
         {
             if (_startButtonEnabled && Balls.Count > 0 && Velocity > 0)
             {
@@ -55,7 +55,7 @@ namespace ViewModel
             }
         }
 
-        private bool CanReset()
+        public bool CanReset()
         {
             if (Balls.Count > 0)
             {
