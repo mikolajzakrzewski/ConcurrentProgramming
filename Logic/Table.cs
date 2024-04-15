@@ -7,20 +7,20 @@ using Data;
 
 namespace Logic
 {
-    public class Table : LogicAPI, IObserver<DataAPI>, IObservable<Table>
+    internal class Table : LogicAPI, IObserver<DataAPI>, IObservable<LogicAPI>
     {
         private readonly int _width;
         private readonly int _height;
         private readonly List<DataAPI> _balls;
         private IDisposable? _subscriptionToken;
-        private List<IObserver<Table>> _observers;
+        private List<IObserver<LogicAPI>> _observers;
 
         public Table(int width, int height)
         {
             this._width = width;
             this._height = height;
             this._balls = new List<DataAPI>();
-            this._observers = new List<IObserver<Table>>();
+            this._observers = new List<IObserver<LogicAPI>>();
         }
 
         public override int Width
@@ -147,7 +147,7 @@ namespace Logic
             }
         }
 
-        public override IDisposable Subscribe(IObserver<Table> observer)
+        public override IDisposable Subscribe(IObserver<LogicAPI> observer)
         {
             if (!_observers.Contains(observer))
             {
@@ -156,7 +156,7 @@ namespace Logic
             return new SubscriptionToken(_observers, observer);
         }
 
-        public void NotifyObservers(Table table)
+        public void NotifyObservers(LogicAPI table)
         {
             foreach (var observer in _observers)
             {
@@ -167,10 +167,10 @@ namespace Logic
 
     public class SubscriptionToken : IDisposable
     {
-        private List<IObserver<Table>> _observers;
-        private IObserver<Table> _observer;
+        private List<IObserver<LogicAPI>> _observers;
+        private IObserver<LogicAPI> _observer;
 
-        public SubscriptionToken(List<IObserver<Table>> observers, IObserver<Table> observer)
+        public SubscriptionToken(List<IObserver<LogicAPI>> observers, IObserver<LogicAPI> observer)
         {
             this._observers = observers;
             this._observer = observer;

@@ -7,9 +7,9 @@ using Data;
 
 namespace Logic
 {
-    public abstract class LogicAPI : IObservable<Table>
+    public abstract class LogicAPI : IObservable<LogicAPI>
     {
-        public static Table Instance(int width, int height)
+        public static LogicAPI Instance(int width, int height)
         {
             return new Table(width, height);
         }
@@ -26,6 +26,6 @@ namespace Logic
 
         public abstract void ResetTable();
 
-        public abstract IDisposable Subscribe(IObserver<Table> observer);
+        public abstract IDisposable Subscribe(IObserver<LogicAPI> observer);
     }
 }

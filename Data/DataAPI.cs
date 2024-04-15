@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public abstract class DataAPI : IObservable<Ball>
+    public abstract class DataAPI : IObservable<DataAPI>
     {
-        public static Ball Instance(float x, float y, int radius)
+        public static DataAPI Instance(float x, float y, int radius)
         {
             return new Ball(x, y, radius);
         }
@@ -25,6 +25,6 @@ namespace Data
 
         public abstract Task Move(float velocity);
 
-        public abstract IDisposable Subscribe(IObserver<Ball> observer);
+        public abstract IDisposable Subscribe(IObserver<DataAPI> observer);
     }
 }

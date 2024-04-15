@@ -8,7 +8,7 @@ using Logic;
 
 namespace Model
 {
-    public class Model : ModelAPI, IObserver<LogicAPI>
+    internal class Model : ModelAPI, IObserver<LogicAPI>
     {
         private readonly LogicAPI table = LogicAPI.Instance(690, 420);
         private readonly ObservableCollection<BallModel> _balls = new ObservableCollection<BallModel>();

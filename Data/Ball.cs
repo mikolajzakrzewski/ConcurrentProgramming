@@ -2,7 +2,7 @@
 
 namespace Data
 {
-    public class Ball : DataAPI, IObservable<Ball>
+    internal class Ball : DataAPI, IObservable<DataAPI>
     {
         private float _x;
         private float _y;
@@ -11,14 +11,14 @@ namespace Data
         private readonly int _radius;
         private readonly object _moveLock = new object();
         private readonly object _velocityLock = new object();
-        private List<IObserver<Ball>> _observers;
+        private List<IObserver<DataAPI>> _observers;
 
         public Ball(float x, float y, int radius)
         {
             this._x = x;
             this._y = y;
             this._radius = radius;
-            this._observers = new List<IObserver<Ball>>();
+            this._observers = new List<IObserver<DataAPI>>();
         }
 
         public override float X
@@ -118,7 +118,7 @@ namespace Data
             }
         }
 
-        public override IDisposable Subscribe(IObserver<Ball> observer)
+        public override IDisposable Subscribe(IObserver<DataAPI> observer)
         {
             if (!_observers.Contains(observer))
             {
@@ -127,7 +127,7 @@ namespace Data
             return new SubscriptionToken(_observers, observer);
         }
 
-        public void NotifyObservers(Ball ball)
+        public void NotifyObservers(DataAPI ball)
         {
             foreach (var observer in _observers)
             {
@@ -138,10 +138,10 @@ namespace Data
 
     public class SubscriptionToken : IDisposable
     {
-        private List<IObserver<Ball>> _observers;
-        private IObserver<Ball> _observer;
+        private List<IObserver<DataAPI>> _observers;
+        private IObserver<DataAPI> _observer;
 
-        public SubscriptionToken(List<IObserver<Ball>> observers, IObserver<Ball> observer)
+        public SubscriptionToken(List<IObserver<DataAPI>> observers, IObserver<DataAPI> observer)
         {
             this._observers = observers;
             this._observer = observer;
