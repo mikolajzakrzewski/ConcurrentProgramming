@@ -18,7 +18,7 @@ namespace Logic
 
         public abstract int Height { get; }
 
-        public abstract List<DataAPI> Balls { get; }
+        public abstract List<List<float>> GetBallPositions();
 
         public abstract void CreateBalls(int number, int radius);
 

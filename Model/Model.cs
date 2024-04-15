@@ -26,9 +26,10 @@ namespace Model
         public override void CreateBalls(int number, int radius)
         {
             table.CreateBalls(number, radius);
-            for (int i = 0; i < table.Balls.Count; i++)
+            List<List<float>> ballPositions = table.GetBallPositions();
+            for (int i = 0; i < ballPositions.Count; i++)
             {
-                BallModel ball = new BallModel(table.Balls[i].X, table.Balls[i].Y, table.Balls[i].Radius);
+                BallModel ball = new BallModel(ballPositions[i][0], ballPositions[i][1], radius);
                 _balls.Add(ball);
             }
         }
@@ -40,8 +41,8 @@ namespace Model
 
         public override void ResetTable()
         {
-            table.ResetTable();
             _balls.Clear();
+            table.ResetTable();
         }
 
         public override ObservableCollection<BallModel> Balls => _balls;
@@ -74,15 +75,16 @@ namespace Model
 
         public void OnNext(LogicAPI value)
         {
-            for (int i = 0; i < _balls.Count; i++)
+            List<List<float>> ballPositions = table.GetBallPositions();
+            for (int i = 0; i < ballPositions.Count; i++)
             {
-                if (_balls[i].X != table.Balls[i].X)
+                if (_balls[i].X != ballPositions[i][0])
                 {
-                    _balls[i].X = table.Balls[i].X;
+                    _balls[i].X = ballPositions[i][0];
                 }
-                if (_balls[i].Y != table.Balls[i].Y)
+                if (_balls[i].Y != ballPositions[i][1])
                 {
-                    _balls[i].Y = table.Balls[i].Y;
+                    _balls[i].Y = ballPositions[i][1];
                 }
             }
         }

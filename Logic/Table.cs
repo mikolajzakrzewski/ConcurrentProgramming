@@ -33,9 +33,20 @@ namespace Logic
             get => _height;
         }
 
-        public override List<DataAPI> Balls
+        public List<DataAPI> Balls
         {
             get => _balls;
+        }
+
+        public override List<List<float>> GetBallPositions()
+        {
+            List<List<float>> ballPositions = new List<List<float>>();
+            foreach (var ball in _balls)
+            {
+                List<float> ballPosition = new List<float> { ball.X, ball.Y };
+                ballPositions.Add(ballPosition);
+            }
+            return ballPositions;
         }
 
         public override void CreateBalls(int number, int radius)
@@ -56,8 +67,6 @@ namespace Logic
             var rand = new Random();
             foreach (var ball in _balls)
             {
-                float newX = rand.Next(0 + ball.Radius, _width - ball.Radius);
-                float newY = rand.Next(0 + ball.Radius, _height - ball.Radius);
                 Task.Run(() => { ball.Move(velocity); });
             }
         }

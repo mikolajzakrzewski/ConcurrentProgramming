@@ -22,7 +22,7 @@ namespace LogicTest
         {
             LogicAPI table = LogicAPI.Instance(1000, 1000);
             table.CreateBalls(15, 20);
-            Assert.AreEqual(15, table.Balls.Count);
+            Assert.AreEqual(15, table.GetBallPositions().Count);
         }
 
         [TestMethod]
@@ -31,7 +31,7 @@ namespace LogicTest
             LogicAPI table = LogicAPI.Instance(1000, 1000);
             table.CreateBalls(15, 20);
             table.ResetTable();
-            Assert.AreEqual(0, table.Balls.Count);
+            Assert.AreEqual(0, table.GetBallPositions().Count);
         }
     }
 }
