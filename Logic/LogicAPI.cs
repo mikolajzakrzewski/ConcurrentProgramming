@@ -14,6 +14,11 @@ namespace Logic
             return new Table(width, height);
         }
 
+        public static LogicAPI Instance(int width, int height, List<DataAPI> balls)
+        {
+            return new Table(width, height, balls);
+        }
+
         public abstract int Width { get; }
 
         public abstract int Height { get; }

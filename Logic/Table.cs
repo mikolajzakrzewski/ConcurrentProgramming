@@ -23,6 +23,13 @@ namespace Logic
             this._observers = new List<IObserver<LogicAPI>>();
         }
 
+        public Table(int width, int height, List<DataAPI> balls)
+        {
+            this._width = width;
+            this._height = height;
+            this._balls = balls;
+        }
+
         public override int Width
         {
             get => _width;
