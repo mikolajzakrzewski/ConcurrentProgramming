@@ -10,7 +10,7 @@ namespace Model
 {
     internal class Model : ModelAPI, IObserver<LogicAPI>
     {
-        private readonly LogicAPI table = LogicAPI.Instance(690, 420);
+        private readonly LogicAPI table;
         private readonly ObservableCollection<BallModel> _balls = new ObservableCollection<BallModel>();
         private IDisposable? _subscriptionToken;
 
@@ -20,7 +20,13 @@ namespace Model
 
         public Model()
         {
+            this.table = LogicAPI.Instance(690, 420);
             this.Subscribe(table);
+        }
+
+        public Model(LogicAPI table)
+        {
+            this.table = table;
         }
 
         public override void CreateBalls(int number, int radius)

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Logic;
+using System.Collections.ObjectModel;
 
 namespace Model
 {
@@ -7,6 +8,11 @@ namespace Model
         public static ModelAPI Instance()
         {
             return new Model();
+        }
+
+        public static ModelAPI Instance(LogicAPI table)
+        {
+            return new Model(table);
         }
 
         public abstract int Width { get; }
