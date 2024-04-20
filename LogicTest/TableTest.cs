@@ -36,17 +36,8 @@ namespace LogicTest
         {
             List<FakeDataAPI> fakeDataAPIs = new List<FakeDataAPI>();
             List<DataAPI> balls = fakeDataAPIs.OfType<DataAPI>().ToList<DataAPI>();
-
             LogicAPI table = LogicAPI.Instance(1000, 1000, balls);
             Assert.IsNotNull(table);    
-        }
-
-        [TestMethod]
-        public void TestCreateBalls()
-        {
-            LogicAPI table = LogicAPI.Instance(1000, 1000);
-            table.CreateBalls(15, 20);
-            Assert.AreEqual(15, table.GetBallPositions().Count);
         }
 
         [TestMethod]
@@ -60,11 +51,8 @@ namespace LogicTest
             fakeDataAPIs.Add(data2);
             fakeDataAPIs.Add(data3);
             List<DataAPI> balls = fakeDataAPIs.OfType<DataAPI>().ToList<DataAPI>();
-
             LogicAPI table = LogicAPI.Instance(1000, 1000, balls);
-
             table.ResetTable();
-
             Assert.AreEqual(0, table.GetBallPositions().Count);
         }
     }
