@@ -11,8 +11,11 @@ namespace LogicTest
     internal class FakeDataAPI : DataAPI
     {
         public override float X { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public override float Y { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public override float VelocityX { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public override float VelocityY { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public override int Radius => throw new NotImplementedException();
