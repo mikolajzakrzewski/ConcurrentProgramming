@@ -78,6 +78,17 @@ namespace ViewModel
             ResetButtonClicked = new RelayCommand(o => { ResetTable(); }, o => CanReset());
         }
 
+        public MainWindowViewModel(ModelAPI modelAPI)
+        {
+            this.modelAPI = modelAPI;
+            _width = modelAPI.Width;
+            _height = modelAPI.Height;
+            _balls = new ObservableCollection<BallModelAPI>();
+            CreateBallsButtonClicked = new RelayCommand(o => { CreateBalls(BallsAmount, Radius); }, o => CanCreateBalls());
+            StartButtonClicked = new RelayCommand(o => { Start(Velocity); }, o => CanStart());
+            ResetButtonClicked = new RelayCommand(o => { ResetTable(); }, o => CanReset());
+        }
+
         public void CreateBalls(int number, int radius)
         {
             modelAPI.CreateBalls(number, radius);
