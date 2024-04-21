@@ -7,9 +7,8 @@ using System.ComponentModel;
 
 namespace Model
 {
-    
-    public class BallModel : INotifyPropertyChanged
-    
+
+    internal class BallModel : BallModelAPI, INotifyPropertyChanged
     {
         private float _x;
         private float _y;
@@ -29,7 +28,7 @@ namespace Model
             _radius = radius;
         }
 
-        public float X
+        public override float X
         {
             get => _x;
             set
@@ -39,7 +38,7 @@ namespace Model
             }
         }
 
-        public float Y
+        public override float Y
         {
             get => _y;
             set
@@ -49,7 +48,7 @@ namespace Model
             }
         }
 
-        public int Radius
+        public override int Radius
         {
             get => _radius;
         }

@@ -22,7 +22,7 @@ namespace ViewModel
         public RelayCommand StartButtonClicked { get; set; }
         public RelayCommand ResetButtonClicked { get; set; }
 
-        public ObservableCollection<BallModel> _balls;
+        public ObservableCollection<BallModelAPI> _balls;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -114,7 +114,7 @@ namespace ViewModel
             get { return _height; }
         }
 
-        public ObservableCollection<BallModel> Balls
+        public ObservableCollection<BallModelAPI> Balls
         {
             get { return _balls; }
         }

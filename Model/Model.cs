@@ -11,7 +11,7 @@ namespace Model
     internal class Model : ModelAPI, IObserver<LogicAPI>
     {
         private readonly LogicAPI table;
-        private readonly ObservableCollection<BallModel> _balls = new ObservableCollection<BallModel>();
+        private readonly ObservableCollection<BallModelAPI> _balls = new ObservableCollection<BallModelAPI>();
         private IDisposable? _subscriptionToken;
 
         public override int Width => table.Width;
@@ -51,7 +51,7 @@ namespace Model
             table.ResetTable();
         }
 
-        public override ObservableCollection<BallModel> Balls => _balls;
+        public override ObservableCollection<BallModelAPI> Balls => _balls;
 
         public void Subscribe(IObservable<LogicAPI> provider)
         {

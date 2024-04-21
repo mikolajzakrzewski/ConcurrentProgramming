@@ -19,7 +19,7 @@ namespace Model
 
         public abstract int Height { get; }
 
-        public abstract ObservableCollection<BallModel> Balls { get; }
+        public abstract ObservableCollection<BallModelAPI> Balls { get; }
 
         public abstract void CreateBalls(int number, int radius);
 
