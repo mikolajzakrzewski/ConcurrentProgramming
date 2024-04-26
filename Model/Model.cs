@@ -12,6 +12,7 @@ namespace Model
     {
         private readonly LogicAPI table;
         private readonly ObservableCollection<BallModelAPI> _balls = new ObservableCollection<BallModelAPI>();
+        private readonly object _ballsLock = new object();
         private IDisposable? _subscriptionToken;
 
         public override int Width => table.Width;
@@ -33,10 +34,13 @@ namespace Model
         {
             table.CreateBalls(number, radius);
             List<List<float>> ballPositions = table.GetBallPositions();
-            for (int i = 0; i < ballPositions.Count; i++)
+            lock (_ballsLock)
             {
-                BallModel ball = new BallModel(ballPositions[i][0], ballPositions[i][1], radius);
-                _balls.Add(ball);
+                for (int i = 0; i < ballPositions.Count; i++)
+                {
+                    BallModel ball = new BallModel(ballPositions[i][0], ballPositions[i][1], radius);
+                    _balls.Add(ball);
+                }
             }
         }
 
@@ -47,7 +51,10 @@ namespace Model
 
         public override void ResetTable()
         {
-            _balls.Clear();
+            lock (_ballsLock)
+            {
+                _balls.Clear();
+            }
             table.ResetTable();
         }
 
@@ -81,16 +88,22 @@ namespace Model
 
         public void OnNext(LogicAPI value)
         {
-            List<List<float>> ballPositions = table.GetBallPositions();
-            for (int i = 0; i < ballPositions.Count; i++)
+            lock (_ballsLock)
             {
-                if (_balls[i].X != ballPositions[i][0])
+                List<List<float>> ballPositions = table.GetBallPositions();
+                if (_balls.Count == ballPositions.Count)
                 {
-                    _balls[i].X = ballPositions[i][0];
-                }
-                if (_balls[i].Y != ballPositions[i][1])
-                {
-                    _balls[i].Y = ballPositions[i][1];
+                    for (int i = 0; i < ballPositions.Count; i++)
+                    {
+                        if (_balls[i].X != ballPositions[i][0])
+                        {
+                            _balls[i].X = ballPositions[i][0];
+                        }
+                        if (_balls[i].Y != ballPositions[i][1])
+                        {
+                            _balls[i].Y = ballPositions[i][1];
+                        }
+                    }
                 }
             }
         }

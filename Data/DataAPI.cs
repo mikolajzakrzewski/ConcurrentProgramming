@@ -23,7 +23,7 @@ namespace Data
 
         public abstract int Radius { get; }
 
-        public abstract Task Move(float velocity);
+        public abstract void Move(float velocity);
 
         public abstract IDisposable Subscribe(IObserver<DataAPI> observer);
     }
