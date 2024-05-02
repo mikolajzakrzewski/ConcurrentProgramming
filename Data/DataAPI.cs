@@ -8,9 +8,9 @@ namespace Data
 {
     public abstract class DataAPI : IObservable<DataAPI>
     {
-        public static DataAPI Instance(float x, float y, int radius)
+        public static DataAPI Instance(float x, float y, int radius, int mass)
         {
-            return new Ball(x, y, radius);
+            return new Ball(x, y, radius, mass);
         }
 
         public abstract float X { get; set; }
@@ -23,7 +23,9 @@ namespace Data
 
         public abstract int Radius { get; }
 
-        public abstract void Move(float velocity);
+        public abstract int Mass { get; }
+
+        public abstract Task Move(float velocity);
 
         public abstract IDisposable Subscribe(IObserver<DataAPI> observer);
     }
