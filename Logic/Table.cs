@@ -12,6 +12,7 @@ namespace Logic
         private readonly int _width;
         private readonly int _height;
         private readonly List<DataAPI> _balls;
+        private readonly object _ballsLock = new object();
         private IDisposable? _subscriptionToken;
         private List<IObserver<LogicAPI>> _observers;
 
@@ -19,7 +20,10 @@ namespace Logic
         {
             this._width = width;
             this._height = height;
-            this._balls = new List<DataAPI>();
+            lock (_ballsLock)
+            {
+                this._balls = new List<DataAPI>();
+            }
             this._observers = new List<IObserver<LogicAPI>>();
         }
 
@@ -27,7 +31,10 @@ namespace Logic
         {
             this._width = width;
             this._height = height;
-            this._balls = balls;
+            lock (_ballsLock)
+            {
+                this._balls = balls;
+            }
         }
 
         public override int Width
@@ -48,39 +55,50 @@ namespace Logic
         public override List<List<float>> GetBallPositions()
         {
             List<List<float>> ballPositions = new List<List<float>>();
-            foreach (var ball in _balls)
+            lock (_ballsLock)
             {
-                List<float> ballPosition = new List<float> { ball.X, ball.Y };
-                ballPositions.Add(ballPosition);
+                foreach (var ball in _balls)
+                {
+                    List<float> ballPosition = new List<float> { ball.X, ball.Y };
+                    ballPositions.Add(ballPosition);
+                }
             }
             return ballPositions;
         }
 
         public override void CreateBalls(int number, int radius)
         {
-            for (int i = 0; i < number; i++)
+            lock (_ballsLock)
             {
-                var rand = new Random();
-                float x = rand.Next(0 + radius, _width - radius);
-                float y = rand.Next(0 + radius, _height - radius);
-                DataAPI ball = DataAPI.Instance(x, y, radius, 200);
-                _balls.Add(ball);
-                this.Subscribe(ball);
+                for (int i = 0; i < number; i++)
+                {
+                    var rand = new Random();
+                    float x = rand.Next(0 + radius, _width - radius);
+                    float y = rand.Next(0 + radius, _height - radius);
+                    DataAPI ball = DataAPI.Instance(x, y, radius, 200);
+                    _balls.Add(ball);
+                    this.Subscribe(ball);
+                }
             }
         }
 
         public override void Start(float velocity)
         {
-            var rand = new Random();
-            foreach (var ball in _balls)
+            lock (_ballsLock)
             {
-                Task.Run(() => { ball.Move(velocity); });
+                foreach (var ball in _balls)
+                {
+                    ball.Move(velocity);
+                }
             }
         }
 
         public override void ResetTable()
         {
-            _balls.Clear();
+            lock (_ballsLock)
+            {
+                _balls.Clear();
+            }
         }
 
         public void Subscribe(IObservable<DataAPI> provider)
