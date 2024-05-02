@@ -20,7 +20,9 @@ namespace LogicTest
 
         public override int Radius => throw new NotImplementedException();
 
-        public override Task Move(float velocity)
+        public override int Mass => throw new NotImplementedException();
+
+        public override void Move(float velocity)
         {
             throw new NotImplementedException();
         }
