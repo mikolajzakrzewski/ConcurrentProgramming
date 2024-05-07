@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Data;
@@ -10,17 +11,12 @@ namespace LogicTest
 {
     internal class FakeDataAPI : DataAPI
     {
-        public override float X { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public override float Y { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public override float VelocityX { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public override float VelocityY { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public override int Radius => throw new NotImplementedException();
 
         public override int Mass => throw new NotImplementedException();
+
+        public override Vector2 Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override Vector2 Velocity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public override void Move(float velocity)
         {
