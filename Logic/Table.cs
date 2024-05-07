@@ -225,11 +225,11 @@ namespace Logic
                 ball1.Position += new System.Numerics.Vector2(sepX * 0.5f, sepY * 0.5f);
                 ball2.Position -= new System.Numerics.Vector2(sepX * 0.5f, sepY * 0.5f);
 
-                ReflectVelocities(ball1, ball2, collisionAngle);
+                ReflectVelocities(ball1, ball2);
             }
         }
 
-        private void ReflectVelocities(DataAPI ball1, DataAPI ball2, float collisionAngle)
+        private void ReflectVelocities(DataAPI ball1, DataAPI ball2)
         {
             float combinedMass = ball1.Mass + ball2.Mass;
             float newVelX1 = ((ball1.Velocity.X * (ball1.Mass - ball2.Mass)) + (2 * ball2.Mass * ball2.Velocity.X)) / combinedMass;
