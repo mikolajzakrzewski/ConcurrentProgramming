@@ -131,13 +131,16 @@ namespace Logic
         {
             WallCollision(value);
 
-            foreach (var ball1 in _balls)
+            lock (_ballsLock)
             {
-                foreach (var ball2 in _balls)
+                foreach (var ball1 in _balls)
                 {
-                    if (ball1 != ball2)
+                    foreach (var ball2 in _balls)
                     {
-                        BallCollision(ball1, ball2);
+                        if (ball1 != ball2)
+                        {
+                            BallCollision(ball1, ball2);
+                        }
                     }
                 }
             }
