@@ -1,84 +1,46 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 
 namespace Data
 {
     internal class Ball : DataAPI, IObservable<DataAPI>
     {
-        private float _x;
-        private float _y;
-        private float _velociyX;
-        private float _velocityY;
+        private Vector2 _position;
+        private Vector2 _velocity;
         private readonly int _radius;
         private readonly int _mass;
         private readonly object _moveLock = new object();
         private readonly object _velocityLock = new object();
         private List<IObserver<DataAPI>> _observers;
 
-        public Ball(float x, float y, int radius, int mass)
+        public Ball(Vector2 position, int radius, int mass)
         {
-            this._x = x;
-            this._y = y;
+            this._position = position;
             this._radius = radius;
             this._observers = new List<IObserver<DataAPI>>();
-            _mass = mass;
+            this._mass = mass;
         }
 
-        public override float X
+        public override Vector2 Position
         {
-            get => _x;
+            get => _position;
             set
             {
-                if (_x != value)
+                lock (_moveLock)
                 {
-                    lock (_moveLock)
-                    {
-                        _x = value;
-                    }
+                    _position = value;
                 }
             }
         }
 
-        public override float Y
+        public override Vector2 Velocity
         {
-            get => _y;
+            get => _velocity;
             set
             {
-                if (_y != value)
+                lock (_velocityLock)
                 {
-                    lock (_moveLock)
-                    {
-                        _y = value;
-                    }
-                }
-            }
-        }
-
-        public override float VelocityX
-        {
-            get => _velociyX;
-            set
-            {
-                if (_velociyX != value)
-                {
-                    lock (_velocityLock)
-                    {
-                        _velociyX = value;
-                    }
-                }
-            }
-        }
-
-        public override float VelocityY
-        {
-            get => _velocityY;
-            set
-            {
-                if (_velocityY != value)
-                {
-                    lock (_velocityLock)
-                    {
-                        _velocityY = value;
-                    }
+                    _velocity = value;
                 }
             }
         }
@@ -97,18 +59,16 @@ namespace Data
         {
             var rand = new Random();
             float moveAngle = rand.Next(0, 360);
-            VelocityX = velocity * (float)Math.Cos(moveAngle);
-            VelocityY = velocity * (float)Math.Sin(moveAngle);
+            Velocity = new Vector2(velocity * (float)Math.Cos(moveAngle), velocity * (float)Math.Sin(moveAngle));
             float timeOfTravel = 1f / 60f;
             System.Timers.Timer timer = new System.Timers.Timer(timeOfTravel * 1000);
             timer.Elapsed += (sender, e) =>
             {
-                float xChange = VelocityX * timeOfTravel;
-                float yChange = VelocityY * timeOfTravel;
+                float xChange = Velocity.X * timeOfTravel;
+                float yChange = Velocity.Y * timeOfTravel;
                 lock (_moveLock)
                 {
-                    _x += xChange;
-                    _y += yChange;
+                    Position += new Vector2(xChange, yChange);
                 }
                 NotifyObservers(this);
             };

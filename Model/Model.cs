@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Logic;
+using System.Numerics;
 
 namespace Model
 {
@@ -38,7 +39,7 @@ namespace Model
             {
                 for (int i = 0; i < ballPositions.Count; i++)
                 {
-                    BallModel ball = new BallModel(ballPositions[i][0], ballPositions[i][1], radius);
+                    BallModel ball = new BallModel(new System.Numerics.Vector2(ballPositions[i][0], ballPositions[i][1]), radius);
                     _balls.Add(ball);
                 }
             }

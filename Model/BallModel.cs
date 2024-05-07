@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Numerics;
 
 namespace Model
 {
-
     internal class BallModel : BallModelAPI, INotifyPropertyChanged
     {
-        private float _x;
-        private float _y;
+        private Vector2 _position;
         private readonly int _radius;
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -21,29 +20,28 @@ namespace Model
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public BallModel(float x, float y, int radius)
+        public BallModel(Vector2 position, int radius)
         {
-            _x = x;
-            _y = y;
+            _position = position;
             _radius = radius;
         }
 
         public override float X
         {
-            get => _x;
+            get => _position.X;
             set
             {
-                _x = value;
+                _position.X = value;
                 OnPropertyChanged(nameof(X));
             }
         }
 
         public override float Y
         {
-            get => _y;
+            get => _position.Y;
             set
             {
-                _y = value;
+                _position.Y = value;
                 OnPropertyChanged(nameof(Y));
             }
         }

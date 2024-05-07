@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,9 +9,9 @@ namespace Model
 {
     public abstract class BallModelAPI
     {
-        public static BallModelAPI Instance(float x, float y, int radius)
+        public static BallModelAPI Instance(Vector2 position, int radius)
         {
-            return new BallModel(x, y, radius);
+            return new BallModel(position, radius);
         }
 
         public abstract float X { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading;
 using Data;
@@ -59,7 +60,7 @@ namespace Logic
             {
                 foreach (var ball in _balls)
                 {
-                    List<float> ballPosition = new List<float> { ball.X, ball.Y };
+                    List<float> ballPosition = new List<float> { ball.Position.X, ball.Position.Y };
                     ballPositions.Add(ballPosition);
                 }
             }
@@ -75,7 +76,7 @@ namespace Logic
                     var rand = new Random();
                     float x = rand.Next(0 + radius, _width - radius);
                     float y = rand.Next(0 + radius, _height - radius);
-                    DataAPI ball = DataAPI.Instance(x, y, radius, 200);
+                    DataAPI ball = DataAPI.Instance(new System.Numerics.Vector2(x, y), radius, 200);
                     _balls.Add(ball);
                     this.Subscribe(ball);
                 }
@@ -150,11 +151,11 @@ namespace Logic
 
         private void WallCollision(DataAPI ball)
         {
-            if (ball.X + ball.Radius > _width || ball.X - ball.Radius < 0 || ball.Y + ball.Radius > _height || ball.Y - ball.Radius < 0)
+            if (ball.Position.X + ball.Radius > _width || ball.Position.X - ball.Radius < 0 || ball.Position.Y + ball.Radius > _height || ball.Position.Y - ball.Radius < 0)
             {
                 bool hitTopOrBottom = false;
 
-                if (ball.Y - ball.Radius < 0 || ball.Y + ball.Radius > _height)
+                if (ball.Position.Y - ball.Radius < 0 || ball.Position.Y + ball.Radius > _height)
                 {
                     hitTopOrBottom = true;
                 }
@@ -162,44 +163,46 @@ namespace Logic
                 if (hitTopOrBottom)
                 {
                     float exceededDistance;
-                    if (ball.Y - ball.Radius < 0)
+                    if (ball.Position.Y - ball.Radius < 0)
                     {
-                        exceededDistance = (float)Math.Abs(ball.Y - ball.Radius);
+                        exceededDistance = Math.Abs(ball.Position.Y - ball.Radius);
+                        ball.Position = new Vector2(ball.Position.X, ball.Radius);
                     }
                     else
                     {
-                        exceededDistance = (float)Math.Abs(ball.Y + ball.Radius - _height);
+                        exceededDistance = Math.Abs(ball.Position.Y + ball.Radius - _height);
+                        ball.Position = new Vector2(ball.Position.X, _height - ball.Radius);
                     }
-                    ball.VelocityY *= -1;
-                    float velocity = (float)Math.Sqrt((float)Math.Pow(ball.VelocityX, 2) + (float)Math.Pow(ball.VelocityY, 2));
+                    ball.Velocity = new Vector2(ball.Velocity.X, -ball.Velocity.Y);
+                    float velocity = (float)Math.Sqrt(ball.Velocity.X * ball.Velocity.X + ball.Velocity.Y * ball.Velocity.Y);
                     float timeOfExceededTravel = exceededDistance / velocity;
-                    ball.X -= ball.VelocityX * timeOfExceededTravel;
-                    ball.Y += ball.VelocityY * timeOfExceededTravel;
+                    ball.Position -= ball.Velocity * timeOfExceededTravel;
                 }
                 else
                 {
                     float exceededDistance;
-                    if (ball.X - ball.Radius < 0)
+                    if (ball.Position.X - ball.Radius < 0)
                     {
-                        exceededDistance = (float)Math.Abs(ball.X - ball.Radius);
+                        exceededDistance = Math.Abs(ball.Position.X - ball.Radius);
+                        ball.Position = new Vector2(ball.Radius, ball.Position.Y);
                     }
                     else
                     {
-                        exceededDistance = (float)Math.Abs(ball.X + ball.Radius - _width);
+                        exceededDistance = Math.Abs(ball.Position.X + ball.Radius - _width);
+                        ball.Position = new Vector2(_width - ball.Radius, ball.Position.Y);
                     }
-                    ball.VelocityX *= -1;
-                    float velocity = (float)Math.Sqrt((float)Math.Pow(ball.VelocityX, 2) + (float)Math.Pow(ball.VelocityY, 2));
+                    ball.Velocity = new Vector2(-ball.Velocity.X, ball.Velocity.Y);
+                    float velocity = (float)Math.Sqrt(ball.Velocity.X * ball.Velocity.X + ball.Velocity.Y * ball.Velocity.Y);
                     float timeOfExceededTravel = exceededDistance / velocity;
-                    ball.Y -= ball.VelocityY * timeOfExceededTravel;
-                    ball.X += ball.VelocityX * timeOfExceededTravel;
+                    ball.Position -= ball.Velocity * timeOfExceededTravel;
                 }
             }
         }
 
         private void BallCollision(DataAPI ball1, DataAPI ball2)
         {
-            float dx = ball2.X - ball1.X;
-            float dy = ball2.Y - ball1.Y;
+            float dx = ball2.Position.X - ball1.Position.X;
+            float dy = ball2.Position.Y - ball1.Position.Y;
             float distance = (float)Math.Sqrt(dx * dx + dy * dy);
 
             if (distance < ball1.Radius + ball2.Radius)
@@ -210,10 +213,8 @@ namespace Logic
                 float mtdX = overlap * (float)Math.Cos(collisionAngle);
                 float mtdY = overlap * (float)Math.Sin(collisionAngle);
 
-                ball1.X -= mtdX / 2;
-                ball1.Y -= mtdY / 2;
-                ball2.X += mtdX / 2;
-                ball2.Y += mtdY / 2;
+                ball1.Position -= new System.Numerics.Vector2(mtdX / 2, mtdY / 2);
+                ball2.Position += new System.Numerics.Vector2(mtdX / 2, mtdY / 2);
 
                 float sepX = -dy;
                 float sepY = dx;
@@ -221,10 +222,8 @@ namespace Logic
                 sepX /= sepLength;
                 sepY /= sepLength;
 
-                ball1.X += sepX * 0.5f;
-                ball1.Y += sepY * 0.5f;
-                ball2.X -= sepX * 0.5f;
-                ball2.Y -= sepY * 0.5f;
+                ball1.Position += new System.Numerics.Vector2(sepX * 0.5f, sepY * 0.5f);
+                ball2.Position -= new System.Numerics.Vector2(sepX * 0.5f, sepY * 0.5f);
 
                 ReflectVelocities(ball1, ball2, collisionAngle);
             }
@@ -233,20 +232,13 @@ namespace Logic
         private void ReflectVelocities(DataAPI ball1, DataAPI ball2, float collisionAngle)
         {
             float combinedMass = ball1.Mass + ball2.Mass;
-            float velX1 = ball1.VelocityX;
-            float velY1 = ball1.VelocityY;
-            float velX2 = ball2.VelocityX;
-            float velY2 = ball2.VelocityY;
+            float newVelX1 = ((ball1.Velocity.X * (ball1.Mass - ball2.Mass)) + (2 * ball2.Mass * ball2.Velocity.X)) / combinedMass;
+            float newVelY1 = ((ball1.Velocity.Y * (ball1.Mass - ball2.Mass)) + (2 * ball2.Mass * ball2.Velocity.Y)) / combinedMass;
+            float newVelX2 = ((ball2.Velocity.X * (ball2.Mass - ball1.Mass)) + (2 * ball1.Mass * ball1.Velocity.X)) / combinedMass;
+            float newVelY2 = ((ball2.Velocity.Y * (ball2.Mass - ball1.Mass)) + (2 * ball1.Mass * ball1.Velocity.Y)) / combinedMass;
 
-            float newVelX1 = ((velX1 * (ball1.Mass - ball2.Mass)) + (2 * ball2.Mass * velX2)) / combinedMass;
-            float newVelY1 = ((velY1 * (ball1.Mass - ball2.Mass)) + (2 * ball2.Mass * velY2)) / combinedMass;
-            float newVelX2 = ((velX2 * (ball2.Mass - ball1.Mass)) + (2 * ball1.Mass * velX1)) / combinedMass;
-            float newVelY2 = ((velY2 * (ball2.Mass - ball1.Mass)) + (2 * ball1.Mass * velY1)) / combinedMass;
-
-            ball1.VelocityX = newVelX1;
-            ball1.VelocityY = newVelY1;
-            ball2.VelocityX = newVelX2;
-            ball2.VelocityY = newVelY2;
+            ball1.Velocity = new System.Numerics.Vector2(newVelX1, newVelY1);
+            ball2.Velocity = new System.Numerics.Vector2(newVelX2, newVelY2);
         }
 
         public override IDisposable Subscribe(IObserver<LogicAPI> observer)
