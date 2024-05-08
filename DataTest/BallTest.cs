@@ -1,16 +1,15 @@
-using Data;
 using System.Numerics;
+using Data;
 
-namespace DataTest
+namespace DataTest;
+
+[TestClass]
+public class BallTest
 {
-    [TestClass]
-    public class BallTest
+    [TestMethod]
+    public void CreateApiTest()
     {
-        [TestMethod]
-        public void CreateAPITest()
-        {
-            DataAPI dataAPI = DataAPI.Instance(new Vector2(6, 9), 10, 10);
-            Assert.IsNotNull(dataAPI);
-        }
+        var dataApi = DataApi.Instance(new Vector2(6, 9), 10, 10);
+        Assert.IsNotNull(dataApi);
     }
 }

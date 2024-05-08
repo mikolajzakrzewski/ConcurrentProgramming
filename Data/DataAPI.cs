@@ -1,29 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
-namespace Data
+namespace Data;
+
+public abstract class DataApi : IObservable<DataApi>
 {
-    public abstract class DataAPI : IObservable<DataAPI>
+    public abstract Vector2 Position { get; set; }
+
+    public abstract Vector2 Velocity { get; set; }
+
+    public abstract int Radius { get; }
+
+    public abstract int Mass { get; }
+
+    public abstract IDisposable Subscribe(IObserver<DataApi> observer);
+
+    public static DataApi Instance(Vector2 position, int radius, int mass)
     {
-        public static DataAPI Instance(Vector2 position, int radius, int mass)
-        {
-            return new Ball(position, radius, mass);
-        }
-
-        public abstract Vector2 Position { get; set; }
-
-        public abstract Vector2 Velocity { get; set; }
-
-        public abstract int Radius { get; }
-
-        public abstract int Mass { get; }
-
-        public abstract Task Move(float velocity);
-
-        public abstract IDisposable Subscribe(IObserver<DataAPI> observer);
+        return new Ball(position, radius, mass);
     }
+
+    public abstract Task Move(float velocity);
 }

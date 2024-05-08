@@ -10,7 +10,7 @@ namespace Model
             return new Model();
         }
 
-        public static ModelAPI Instance(LogicAPI table)
+        public static ModelAPI Instance(LogicApi table)
         {
             return new Model(table);
         }

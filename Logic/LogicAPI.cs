@@ -1,36 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Data;
+﻿using Data;
 
-namespace Logic
+namespace Logic;
+
+public abstract class LogicApi : IObservable<LogicApi>
 {
-    public abstract class LogicAPI : IObservable<LogicAPI>
+    public abstract int Width { get; }
+
+    public abstract int Height { get; }
+
+    public abstract IDisposable Subscribe(IObserver<LogicApi> observer);
+
+    public static LogicApi Instance(int width, int height)
     {
-        public static LogicAPI Instance(int width, int height)
-        {
-            return new Table(width, height);
-        }
-
-        public static LogicAPI Instance(int width, int height, List<DataAPI> balls)
-        {
-            return new Table(width, height, balls);
-        }
-
-        public abstract int Width { get; }
-
-        public abstract int Height { get; }
-
-        public abstract List<List<float>> GetBallPositions();
-
-        public abstract void CreateBalls(int number, int radius);
-
-        public abstract void Start(float velocity);
-
-        public abstract void ResetTable();
-
-        public abstract IDisposable Subscribe(IObserver<LogicAPI> observer);
+        return new Table(width, height);
     }
+
+    public static LogicApi Instance(int width, int height, List<DataApi> balls)
+    {
+        return new Table(width, height, balls);
+    }
+
+    public abstract List<List<float>> GetBallPositions();
+
+    public abstract void CreateBalls(int number, int radius);
+
+    public abstract void Start(float velocity);
+
+    public abstract void ResetTable();
 }

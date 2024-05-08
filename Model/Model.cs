@@ -9,9 +9,9 @@ using System.Numerics;
 
 namespace Model
 {
-    internal class Model : ModelAPI, IObserver<LogicAPI>
+    internal class Model : ModelAPI, IObserver<LogicApi>
     {
-        private readonly LogicAPI table;
+        private readonly LogicApi table;
         private readonly ObservableCollection<BallModelAPI> _balls = new ObservableCollection<BallModelAPI>();
         private readonly object _ballsLock = new object();
         private IDisposable? _subscriptionToken;
@@ -22,11 +22,11 @@ namespace Model
 
         public Model()
         {
-            this.table = LogicAPI.Instance(690, 420);
+            this.table = LogicApi.Instance(690, 420);
             this.Subscribe(table);
         }
 
-        public Model(LogicAPI table)
+        public Model(LogicApi table)
         {
             this.table = table;
         }
@@ -61,7 +61,7 @@ namespace Model
 
         public override ObservableCollection<BallModelAPI> Balls => _balls;
 
-        public void Subscribe(IObservable<LogicAPI> provider)
+        public void Subscribe(IObservable<LogicApi> provider)
         {
             if (provider != null)
             {
@@ -87,7 +87,7 @@ namespace Model
             throw new NotImplementedException();
         }
 
-        public void OnNext(LogicAPI value)
+        public void OnNext(LogicApi value)
         {
             lock (_ballsLock)
             {

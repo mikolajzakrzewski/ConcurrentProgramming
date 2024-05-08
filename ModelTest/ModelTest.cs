@@ -3,7 +3,7 @@ using Model;
 
 namespace ModelTest
 {
-    internal class FakeLogicAPI : LogicAPI
+    internal class FakeLogicAPI : LogicApi
     {
         public override int Width => throw new System.NotImplementedException();
 
@@ -35,7 +35,7 @@ namespace ModelTest
             
         }
 
-        public override IDisposable Subscribe(IObserver<LogicAPI> observer)
+        public override IDisposable Subscribe(IObserver<LogicApi> observer)
         {
             throw new System.NotImplementedException();
         }

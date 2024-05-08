@@ -1,60 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 using Data;
 using Logic;
 
-namespace LogicTest
+namespace LogicTest;
+
+internal class FakeDataApi : DataApi
 {
-    internal class FakeDataAPI : DataAPI
+    public override int Radius => throw new NotImplementedException();
+
+    public override int Mass => throw new NotImplementedException();
+
+    public override Vector2 Position
     {
-        public override int Radius => throw new NotImplementedException();
-
-        public override int Mass => throw new NotImplementedException();
-
-        public override Vector2 Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public override Vector2 Velocity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public override void Move(float velocity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override IDisposable Subscribe(IObserver<DataAPI> observer)
-        {
-            throw new NotImplementedException();
-        }
+        get => throw new NotImplementedException();
+        set => throw new NotImplementedException();
     }
 
-    [TestClass]
-    public class TableTest
+    public override Vector2 Velocity
     {
-        [TestMethod]
-        public void CreateAPITest()
-        {
-            List<FakeDataAPI> fakeDataAPIs = new List<FakeDataAPI>();
-            List<DataAPI> balls = fakeDataAPIs.OfType<DataAPI>().ToList<DataAPI>();
-            LogicAPI table = LogicAPI.Instance(1000, 1000, balls);
-            Assert.IsNotNull(table);    
-        }
+        get => throw new NotImplementedException();
+        set => throw new NotImplementedException();
+    }
 
-        [TestMethod]
-        public void TestResetTable()
-        {
-            List<FakeDataAPI> fakeDataAPIs = new List<FakeDataAPI>();
-            FakeDataAPI data1 = new FakeDataAPI();
-            FakeDataAPI data2 = new FakeDataAPI();
-            FakeDataAPI data3 = new FakeDataAPI();
-            fakeDataAPIs.Add(data1);
-            fakeDataAPIs.Add(data2);
-            fakeDataAPIs.Add(data3);
-            List<DataAPI> balls = fakeDataAPIs.OfType<DataAPI>().ToList<DataAPI>();
-            LogicAPI table = LogicAPI.Instance(1000, 1000, balls);
-            table.ResetTable();
-            Assert.AreEqual(0, table.GetBallPositions().Count);
-        }
+    public override Task Move(float velocity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override IDisposable Subscribe(IObserver<DataApi> observer)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+[TestClass]
+public class TableTest
+{
+    [TestMethod]
+    public void CreateApiTest()
+    {
+        var fakeDataApis = new List<FakeDataApi>();
+        var balls = fakeDataApis.OfType<DataApi>().ToList();
+        var table = LogicApi.Instance(1000, 1000, balls);
+        Assert.IsNotNull(table);
+    }
+
+    [TestMethod]
+    public void TestResetTable()
+    {
+        var fakeDataApis = new List<FakeDataApi>();
+        var data1 = new FakeDataApi();
+        var data2 = new FakeDataApi();
+        var data3 = new FakeDataApi();
+        fakeDataApis.Add(data1);
+        fakeDataApis.Add(data2);
+        fakeDataApis.Add(data3);
+        var balls = fakeDataApis.OfType<DataApi>().ToList();
+        var table = LogicApi.Instance(1000, 1000, balls);
+        table.ResetTable();
+        Assert.AreEqual(0, table.GetBallPositions().Count);
     }
 }
