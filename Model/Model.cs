@@ -1,112 +1,102 @@
-﻿using System.Diagnostics;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Logic;
+﻿using System.Collections.ObjectModel;
 using System.Numerics;
+using Logic;
 
-namespace Model
+namespace Model;
+
+internal class Model : ModelApi, IObserver<LogicApi>
 {
-    internal class Model : ModelAPI, IObserver<LogicApi>
+    private readonly ObservableCollection<BallModelApi> _balls = [];
+    private readonly object _ballsLock = new();
+    private readonly LogicApi _table;
+    private IDisposable? _subscriptionToken;
+
+    public Model()
     {
-        private readonly LogicApi table;
-        private readonly ObservableCollection<BallModelAPI> _balls = new ObservableCollection<BallModelAPI>();
-        private readonly object _ballsLock = new object();
-        private IDisposable? _subscriptionToken;
+        _table = LogicApi.Instance(690, 420);
+        Subscribe(_table);
+    }
 
-        public override int Width => table.Width;
+    public Model(LogicApi table)
+    {
+        this._table = table;
+    }
 
-        public override int Height => table.Height;
+    public override int Width => _table.Width;
 
-        public Model()
-        {
-            this.table = LogicApi.Instance(690, 420);
-            this.Subscribe(table);
-        }
+    public override int Height => _table.Height;
 
-        public Model(LogicApi table)
-        {
-            this.table = table;
-        }
-
-        public override void CreateBalls(int number, int radius)
-        {
-            table.CreateBalls(number, radius);
-            List<List<float>> ballPositions = table.GetBallPositions();
-            lock (_ballsLock)
-            {
-                for (int i = 0; i < ballPositions.Count; i++)
-                {
-                    BallModel ball = new BallModel(new Vector2(ballPositions[i][0], ballPositions[i][1]), radius);
-                    _balls.Add(ball);
-                }
-            }
-        }
-
-        public override void Start(float velocity)
-        {
-            table.Start(velocity);
-        }
-
-        public override void ResetTable()
+    public override ObservableCollection<BallModelApi> Balls
+    {
+        get
         {
             lock (_ballsLock)
             {
-                _balls.Clear();
+                return _balls;
             }
-            table.ResetTable();
         }
+    }
 
-        public override ObservableCollection<BallModelAPI> Balls => _balls;
+    public void OnCompleted()
+    {
+        throw new NotImplementedException();
+    }
 
-        public void Subscribe(IObservable<LogicApi> provider)
+    public void OnError(Exception error)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnNext(LogicApi value)
+    {
+        lock (_ballsLock)
         {
-            if (provider != null)
+            var ballPositions = _table.GetBallPositions();
+            if (_balls.Count != ballPositions.Count) return;
+            for (var i = 0; i < ballPositions.Count; i++)
             {
-                _subscriptionToken = provider.Subscribe(this);
+                if (_balls[i].X != ballPositions[i][0]) _balls[i].X = ballPositions[i][0];
+                if (_balls[i].Y != ballPositions[i][1]) _balls[i].Y = ballPositions[i][1];
             }
         }
+    }
 
-        public void Unsubscribe()
+    public override void CreateBalls(int number, int radius)
+    {
+        _table.CreateBalls(number, radius);
+        var ballPositions = _table.GetBallPositions();
+        lock (_ballsLock)
         {
-            if (_subscriptionToken != null)
+            foreach (var ballPosition in ballPositions)
             {
-                _subscriptionToken.Dispose();
+                var ball = new BallModel(new Vector2(ballPosition[0], ballPosition[1]), radius);
+                _balls.Add(ball);
             }
         }
+    }
 
-        public void OnCompleted()
+    public override void Start(float velocity)
+    {
+        _table.Start(velocity);
+    }
+
+    public override void ResetTable()
+    {
+        lock (_ballsLock)
         {
-            throw new NotImplementedException();
+            _balls.Clear();
         }
 
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
+        _table.ResetTable();
+    }
 
-        public void OnNext(LogicApi value)
-        {
-            lock (_ballsLock)
-            {
-                List<List<float>> ballPositions = table.GetBallPositions();
-                if (_balls.Count == ballPositions.Count)
-                {
-                    for (int i = 0; i < ballPositions.Count; i++)
-                    {
-                        if (_balls[i].X != ballPositions[i][0])
-                        {
-                            _balls[i].X = ballPositions[i][0];
-                        }
-                        if (_balls[i].Y != ballPositions[i][1])
-                        {
-                            _balls[i].Y = ballPositions[i][1];
-                        }
-                    }
-                }
-            }
-        }
+    public void Subscribe(IObservable<LogicApi> provider)
+    {
+        if (provider != null) _subscriptionToken = provider.Subscribe(this);
+    }
+
+    public void Unsubscribe()
+    {
+        _subscriptionToken?.Dispose();
     }
 }

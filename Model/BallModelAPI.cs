@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
-namespace Model
+namespace Model;
+
+public abstract class BallModelApi
 {
-    public abstract class BallModelAPI
+    public abstract float X { get; set; }
+
+    public abstract float Y { get; set; }
+
+    public abstract int Radius { get; }
+
+    public static BallModelApi Instance(Vector2 position, int radius)
     {
-        public static BallModelAPI Instance(Vector2 position, int radius)
-        {
-            return new BallModel(position, radius);
-        }
-
-        public abstract float X { get; set; }
-
-        public abstract float Y { get; set; }
-
-        public abstract int Radius { get; }
+        return new BallModel(position, radius);
     }
 }

@@ -1,54 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Numerics;
 
-namespace Model
+namespace Model;
+
+internal class BallModel(Vector2 position, int radius) : BallModelApi, INotifyPropertyChanged
 {
-    internal class BallModel : BallModelAPI, INotifyPropertyChanged
+    public override float X
     {
-        private Vector2 _position;
-        private readonly int _radius;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public void OnPropertyChanged(string propertyName)
+        get => position.X;
+        set
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            position.X = value;
+            OnPropertyChanged(nameof(X));
         }
+    }
 
-        public BallModel(Vector2 position, int radius)
+    public override float Y
+    {
+        get => position.Y;
+        set
         {
-            _position = position;
-            _radius = radius;
+            position.Y = value;
+            OnPropertyChanged(nameof(Y));
         }
+    }
 
-        public override float X
-        {
-            get => _position.X;
-            set
-            {
-                _position.X = value;
-                OnPropertyChanged(nameof(X));
-            }
-        }
+    public override int Radius => radius;
 
-        public override float Y
-        {
-            get => _position.Y;
-            set
-            {
-                _position.Y = value;
-                OnPropertyChanged(nameof(Y));
-            }
-        }
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-        public override int Radius
-        {
-            get => _radius;
-        }
+    public void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
