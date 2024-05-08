@@ -22,7 +22,7 @@ namespace Data
 
         public abstract int Mass { get; }
 
-        public abstract void Move(float velocity);
+        public abstract Task Move(float velocity);
 
         public abstract IDisposable Subscribe(IObserver<DataAPI> observer);
     }

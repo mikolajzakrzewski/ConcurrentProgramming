@@ -89,7 +89,10 @@ namespace Logic
             {
                 foreach (var ball in _balls)
                 {
-                    ball.Move(velocity);
+                    Task.Run(() =>
+                    {
+                        ball.Move(velocity);
+                    });
                 }
             }
         }

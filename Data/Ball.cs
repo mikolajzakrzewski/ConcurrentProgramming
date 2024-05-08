@@ -55,24 +55,26 @@ namespace Data
             get => _mass;
         }
 
-        public override void Move(float velocity)
+        public override async Task Move(float velocity)
         {
-            var rand = new Random();
+            Random rand = new();
             float moveAngle = rand.Next(0, 360);
             Velocity = new Vector2(velocity * (float)Math.Cos(moveAngle), velocity * (float)Math.Sin(moveAngle));
-            float timeOfTravel = 1f / 60f;
-            System.Timers.Timer timer = new System.Timers.Timer(timeOfTravel * 1000);
-            timer.Elapsed += (sender, e) =>
+            const float timeOfTravel = 1f / 60f;
+            while (true)
             {
-                float xChange = Velocity.X * timeOfTravel;
-                float yChange = Velocity.Y * timeOfTravel;
+                Stopwatch stopwatch = new();
+                stopwatch.Start();
+                await Task.Delay(TimeSpan.FromSeconds(timeOfTravel));
+                stopwatch.Stop();
+                var timeElapsed = (float)stopwatch.Elapsed.TotalSeconds;
+                var velocityChange = Velocity * (timeElapsed);
                 lock (_moveLock)
                 {
-                    Position += new Vector2(xChange, yChange);
+                    _position += velocityChange;
                 }
                 NotifyObservers(this);
-            };
-            timer.Start();
+            }
         }
 
         public override IDisposable Subscribe(IObserver<DataAPI> observer)
