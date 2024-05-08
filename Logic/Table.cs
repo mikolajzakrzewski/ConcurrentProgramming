@@ -62,9 +62,8 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
         lock (_ballsLock)
         {
             foreach (var ball1 in Balls)
-            foreach (var ball2 in Balls)
-                if (ball1 != ball2)
-                    BallCollision(ball1, ball2);
+                if (ball1 != value)
+                    BallCollision(ball1, value);
         }
 
         NotifyObservers(this);
