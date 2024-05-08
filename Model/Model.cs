@@ -39,7 +39,7 @@ namespace Model
             {
                 for (int i = 0; i < ballPositions.Count; i++)
                 {
-                    BallModel ball = new BallModel(new System.Numerics.Vector2(ballPositions[i][0], ballPositions[i][1]), radius);
+                    BallModel ball = new BallModel(new Vector2(ballPositions[i][0], ballPositions[i][1]), radius);
                     _balls.Add(ball);
                 }
             }

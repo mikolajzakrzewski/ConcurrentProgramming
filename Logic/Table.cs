@@ -76,7 +76,7 @@ namespace Logic
                     var rand = new Random();
                     float x = rand.Next(0 + radius, _width - radius);
                     float y = rand.Next(0 + radius, _height - radius);
-                    DataAPI ball = DataAPI.Instance(new System.Numerics.Vector2(x, y), radius, 200);
+                    DataAPI ball = DataAPI.Instance(new Vector2(x, y), radius, 200);
                     _balls.Add(ball);
                     this.Subscribe(ball);
                 }
@@ -213,8 +213,8 @@ namespace Logic
                 float mtdX = overlap * (float)Math.Cos(collisionAngle);
                 float mtdY = overlap * (float)Math.Sin(collisionAngle);
 
-                ball1.Position -= new System.Numerics.Vector2(mtdX / 2, mtdY / 2);
-                ball2.Position += new System.Numerics.Vector2(mtdX / 2, mtdY / 2);
+                ball1.Position -= new Vector2(mtdX / 2, mtdY / 2);
+                ball2.Position += new Vector2(mtdX / 2, mtdY / 2);
 
                 float sepX = -dy;
                 float sepY = dx;
@@ -222,8 +222,8 @@ namespace Logic
                 sepX /= sepLength;
                 sepY /= sepLength;
 
-                ball1.Position += new System.Numerics.Vector2(sepX * 0.5f, sepY * 0.5f);
-                ball2.Position -= new System.Numerics.Vector2(sepX * 0.5f, sepY * 0.5f);
+                ball1.Position += new Vector2(sepX * 0.5f, sepY * 0.5f);
+                ball2.Position -= new Vector2(sepX * 0.5f, sepY * 0.5f);
 
                 ReflectVelocities(ball1, ball2);
             }
@@ -237,8 +237,8 @@ namespace Logic
             float newVelX2 = ((ball2.Velocity.X * (ball2.Mass - ball1.Mass)) + (2 * ball1.Mass * ball1.Velocity.X)) / combinedMass;
             float newVelY2 = ((ball2.Velocity.Y * (ball2.Mass - ball1.Mass)) + (2 * ball1.Mass * ball1.Velocity.Y)) / combinedMass;
 
-            ball1.Velocity = new System.Numerics.Vector2(newVelX1, newVelY1);
-            ball2.Velocity = new System.Numerics.Vector2(newVelX2, newVelY2);
+            ball1.Velocity = new Vector2(newVelX1, newVelY1);
+            ball2.Velocity = new Vector2(newVelX2, newVelY2);
         }
 
         public override IDisposable Subscribe(IObserver<LogicAPI> observer)
