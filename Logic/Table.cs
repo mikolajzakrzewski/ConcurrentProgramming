@@ -62,8 +62,9 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
         lock (_ballsLock)
         {
             foreach (var ball1 in Balls)
-                if (ball1 != value)
-                    BallCollision(ball1, value);
+                foreach (var ball2 in Balls)
+                    if (ball1 != ball2)
+                        BallCollision(ball1, ball2);
         }
 
         NotifyObservers(this);
@@ -197,11 +198,6 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
         ball1.Position += new Vector2(sepX * 0.5f, sepY * 0.5f);
         ball2.Position -= new Vector2(sepX * 0.5f, sepY * 0.5f);
 
-        ReflectVelocities(ball1, ball2);
-    }
-
-    private static void ReflectVelocities(DataApi ball1, DataApi ball2)
-    {
         float combinedMass = ball1.Mass + ball2.Mass;
         var newVelX1 = (ball1.Velocity.X * (ball1.Mass - ball2.Mass) + 2 * ball2.Mass * ball2.Velocity.X) /
                        combinedMass;
