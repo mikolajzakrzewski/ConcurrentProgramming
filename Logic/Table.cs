@@ -130,86 +130,57 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
 
     private void WallCollision(DataApi ball)
     {
-        if (!(ball.Position.X + ball.Radius > _width) && !(ball.Position.X - ball.Radius < 0) &&
-            !(ball.Position.Y + ball.Radius > _height) && !(ball.Position.Y - ball.Radius < 0)) return;
-        var hitTopOrBottom = ball.Position.Y - ball.Radius < 0 || ball.Position.Y + ball.Radius > _height;
-        if (hitTopOrBottom)
-        {
-            float exceededDistance;
-            if (ball.Position.Y - ball.Radius < 0)
-            {
-                exceededDistance = Math.Abs(ball.Position.Y - ball.Radius);
-                ball.Position = new Vector2(ball.Position.X, ball.Radius);
-            }
-            else
-            {
-                exceededDistance = Math.Abs(ball.Position.Y + ball.Radius - _height);
-                ball.Position = new Vector2(ball.Position.X, _height - ball.Radius);
-            }
+        Vector2 position = ball.Position;
+        Vector2 velocity = ball.Velocity;
+        int radius = ball.Radius;
 
-            ball.Velocity = new Vector2(ball.Velocity.X, -ball.Velocity.Y);
-            var velocity = (float)Math.Sqrt(ball.Velocity.X * ball.Velocity.X + ball.Velocity.Y * ball.Velocity.Y);
-            var timeOfExceededTravel = exceededDistance / velocity;
-            ball.Position -= ball.Velocity * timeOfExceededTravel;
-        }
-        else
+        if (position.X - radius < 0)
         {
-            float exceededDistance;
-            if (ball.Position.X - ball.Radius < 0)
-            {
-                exceededDistance = Math.Abs(ball.Position.X - ball.Radius);
-                ball.Position = new Vector2(ball.Radius, ball.Position.Y);
-            }
-            else
-            {
-                exceededDistance = Math.Abs(ball.Position.X + ball.Radius - _width);
-                ball.Position = new Vector2(_width - ball.Radius, ball.Position.Y);
-            }
-
-            ball.Velocity = new Vector2(-ball.Velocity.X, ball.Velocity.Y);
-            var velocity = (float)Math.Sqrt(ball.Velocity.X * ball.Velocity.X + ball.Velocity.Y * ball.Velocity.Y);
-            var timeOfExceededTravel = exceededDistance / velocity;
-            ball.Position -= ball.Velocity * timeOfExceededTravel;
+            if (velocity.X < 0)
+                velocity.X = Math.Abs(velocity.X);
         }
+        else if (position.X + radius > _width)
+        {
+            if (velocity.X > 0)
+                velocity.X = -Math.Abs(velocity.X);
+        }
+
+        if (position.Y - radius < 0)
+        {
+            if (velocity.Y < 0)
+                velocity.Y = Math.Abs(velocity.Y);
+        }
+        else if (position.Y + radius > _height)
+        {
+            if (velocity.Y > 0)
+                velocity.Y = -Math.Abs(velocity.Y);
+        }
+
+        ball.Velocity = velocity;
     }
 
-    private static void BallCollision(DataApi ball1, DataApi ball2)
+    private void BallCollision(DataApi ball1, DataApi ball2)
     {
-        var dx = ball2.Position.X - ball1.Position.X;
-        var dy = ball2.Position.Y - ball1.Position.Y;
-        var distance = (float)Math.Sqrt(dx * dx + dy * dy);
+        Vector2 distanceVector = ball2.Position - ball1.Position;
+        float minDistance = ball1.Radius + ball2.Radius;
 
-        if (!(distance < ball1.Radius + ball2.Radius)) return;
-        var collisionAngle = (float)Math.Atan2(dy, dx);
+        if (distanceVector.LengthSquared() < minDistance * minDistance)
+        {
+            Vector2 collisionNormal = Vector2.Normalize(distanceVector);
 
-        var overlap = ball1.Radius + ball2.Radius - distance;
-        var mtdX = overlap * (float)Math.Cos(collisionAngle);
-        var mtdY = overlap * (float)Math.Sin(collisionAngle);
+            Vector2 relativeVelocity = ball2.Velocity - ball1.Velocity;
 
-        ball1.Position -= new Vector2(mtdX / 2, mtdY / 2);
-        ball2.Position += new Vector2(mtdX / 2, mtdY / 2);
+            float impulseMagnitude = Vector2.Dot(relativeVelocity, collisionNormal);
 
-        var sepX = -dy;
-        var sepY = dx;
-        var sepLength = (float)Math.Sqrt(sepX * sepX + sepY * sepY);
-        sepX /= sepLength;
-        sepY /= sepLength;
+            if (impulseMagnitude > 0)
+                return;
 
-        ball1.Position += new Vector2(sepX * 0.5f, sepY * 0.5f);
-        ball2.Position -= new Vector2(sepX * 0.5f, sepY * 0.5f);
+            Vector2 newVelocity1 = ((ball1.Mass - ball2.Mass) / (ball1.Mass + ball2.Mass)) * ball1.Velocity + ((2 * ball2.Mass) / (ball1.Mass + ball2.Mass)) * ball2.Velocity;
+            Vector2 newVelocity2 = ((2 * ball1.Mass) / (ball1.Mass + ball2.Mass)) * ball1.Velocity + ((ball2.Mass - ball1.Mass) / (ball1.Mass + ball2.Mass)) * ball2.Velocity;
 
-        float combinedMass = ball1.Mass + ball2.Mass;
-        var newVelX1 = (ball1.Velocity.X * (ball1.Mass - ball2.Mass) + 2 * ball2.Mass * ball2.Velocity.X) /
-                       combinedMass;
-        var newVelY1 = (ball1.Velocity.Y * (ball1.Mass - ball2.Mass) + 2 * ball2.Mass * ball2.Velocity.Y) /
-                       combinedMass;
-        var newVelX2 = (ball2.Velocity.X * (ball2.Mass - ball1.Mass) + 2 * ball1.Mass * ball1.Velocity.X) /
-                       combinedMass;
-        var newVelY2 = (ball2.Velocity.Y * (ball2.Mass - ball1.Mass) + 2 * ball1.Mass * ball1.Velocity.Y) /
-                       combinedMass;
-
-        ball1.Velocity = new Vector2(newVelX1, newVelY1);
-        ball2.Velocity = new Vector2(newVelX2, newVelY2);
+            ball1.Velocity = newVelocity1;
+            ball2.Velocity = newVelocity2;
+        }
     }
 
     public void NotifyObservers(LogicApi table)
