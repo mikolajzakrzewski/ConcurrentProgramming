@@ -8,63 +8,63 @@
         Title="Balls" Height="550" Width="920">
 
     <Window.DataContext>
-        <viewmodel:MainWindowViewModel/>
+        <viewmodel:MainWindowViewModel />
     </Window.DataContext>
 
     <Viewbox Stretch="Uniform">
         <Grid Background="Azure">
             <Grid.LayoutTransform>
-                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                <ScaleTransform ScaleX="1" ScaleY="1" />
             </Grid.LayoutTransform>
-            <Button Content="Stop" 
-                    HorizontalAlignment="Left" 
-                    Margin="5, 350, 0, 0" 
-                    VerticalAlignment="Top" 
+            <Button Content="Stop"
+                    HorizontalAlignment="Left"
+                    Margin="5, 350, 0, 0"
+                    VerticalAlignment="Top"
                     Command="{Binding ResetButtonClicked}"
                     Background="Red"
-                    Width="50"/>
+                    Width="50" />
 
             <Button Content="Start"
-                    HorizontalAlignment="Left" 
-                    Margin="5, 300, 0, 0" 
-                    VerticalAlignment="Top" 
+                    HorizontalAlignment="Left"
+                    Margin="5, 300, 0, 0"
+                    VerticalAlignment="Top"
                     Command="{Binding StartButtonClicked}"
                     Background="LightGreen"
-                    Width="50"/>
+                    Width="50" />
 
             <Button Content="Create balls"
-                    HorizontalAlignment="Left" 
-                    Margin="5, 250, 0, 0" 
-                    VerticalAlignment="Top" 
+                    HorizontalAlignment="Left"
+                    Margin="5, 250, 0, 0"
+                    VerticalAlignment="Top"
                     Command="{Binding CreateBallsButtonClicked}"
                     Background="PeachPuff"
-                    Width="85"/>
+                    Width="85" />
 
             <Label Content="Podaj liczbe kul:"
                    FontSize="20"
                    HorizontalAlignment="Left"
                    Margin="5"
-                   VerticalAlignment="Top"/>
+                   VerticalAlignment="Top" />
 
             <Label Content="Podaj prędkość:"
                    FontSize="20"
                    HorizontalAlignment="Left"
                    Margin="5,84,0,0"
-                   VerticalAlignment="Top"/>
+                   VerticalAlignment="Top" />
 
             <Label Content="Podaj promień:"
                    FontSize="20"
                    HorizontalAlignment="Left"
                    Margin="5,160,0,0"
-                   VerticalAlignment="Top"/>
+                   VerticalAlignment="Top" />
 
             <TextBox FontSize="20"
-                 HorizontalAlignment="Left"
-                 Margin="10, 200, 0, 0"
-                 Text="{Binding Radius}"
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Top"
-                 Width="120"/>
+                     HorizontalAlignment="Left"
+                     Margin="10, 200, 0, 0"
+                     Text="{Binding Radius}"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Top"
+                     Width="120" />
 
             <TextBox FontSize="20"
                      HorizontalAlignment="Left"
@@ -72,7 +72,7 @@
                      Text="{Binding Velocity}"
                      TextWrapping="Wrap"
                      VerticalAlignment="Top"
-                     Width="120"/>
+                     Width="120" />
 
             <TextBox FontSize="20"
                      HorizontalAlignment="Left"
@@ -80,13 +80,13 @@
                      Text="{Binding BallsAmount}"
                      TextWrapping="Wrap"
                      VerticalAlignment="Top"
-                     Width="120"/>
+                     Width="120" />
 
             <ItemsControl
-        Width="{Binding Width}"
-        Height="{Binding Height}"
-        ItemsSource="{Binding Balls, UpdateSourceTrigger=PropertyChanged}"
-        Margin="190,7,20,7">
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                ItemsSource="{Binding Balls, UpdateSourceTrigger=PropertyChanged}"
+                Margin="190,7,20,7">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas Background="DarkGreen" />
@@ -103,8 +103,8 @@
                         <Path Fill="LightSkyBlue">
                             <Path.Data>
                                 <EllipseGeometry
-                            RadiusX="{Binding Radius}"
-                            RadiusY="{Binding Radius}"/>
+                                    RadiusX="{Binding Radius}"
+                                    RadiusY="{Binding Radius}" />
                             </Path.Data>
                         </Path>
                     </DataTemplate>

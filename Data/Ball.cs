@@ -10,10 +10,7 @@ internal class Ball(Vector2 position, int radius, int mass) : DataApi, IObservab
     private readonly object _velocityLock = new();
     private Vector2 _velocity;
 
-    public override Vector2 Position
-    {
-        get => position;
-    }
+    public override Vector2 Position => position;
 
     public override Vector2 Velocity
     {

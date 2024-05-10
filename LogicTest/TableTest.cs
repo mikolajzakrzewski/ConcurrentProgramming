@@ -10,11 +10,7 @@ internal class FakeDataApi : DataApi
 
     public override int Mass => throw new NotImplementedException();
 
-    public override Vector2 Position
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
+    public override Vector2 Position => throw new NotImplementedException();
 
     public override Vector2 Velocity
     {

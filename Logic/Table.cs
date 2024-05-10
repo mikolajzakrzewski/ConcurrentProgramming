@@ -7,8 +7,8 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
 {
     private readonly object _ballsLock = new();
     private readonly int _height;
-    private readonly int _width;
     private readonly List<IObserver<LogicApi>>? _observers;
+    private readonly int _width;
     private IDisposable? _subscriptionToken;
 
     public Table(int width, int height)
@@ -62,9 +62,9 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
         lock (_ballsLock)
         {
             foreach (var ball1 in Balls)
-                foreach (var ball2 in Balls)
-                    if (ball1 != ball2)
-                        BallCollision(ball1, ball2);
+            foreach (var ball2 in Balls)
+                if (ball1 != ball2)
+                    BallCollision(ball1, ball2);
         }
 
         NotifyObservers(this);
@@ -130,9 +130,9 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
 
     private void WallCollision(DataApi ball)
     {
-        Vector2 position = ball.Position;
-        Vector2 velocity = ball.Velocity;
-        int radius = ball.Radius;
+        var position = ball.Position;
+        var velocity = ball.Velocity;
+        var radius = ball.Radius;
 
         if (position.X - radius < 0)
         {
@@ -161,22 +161,24 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
 
     private void BallCollision(DataApi ball1, DataApi ball2)
     {
-        Vector2 distanceVector = ball2.Position - ball1.Position;
+        var distanceVector = ball2.Position - ball1.Position;
         float minDistance = ball1.Radius + ball2.Radius;
 
         if (distanceVector.LengthSquared() < minDistance * minDistance)
         {
-            Vector2 collisionNormal = Vector2.Normalize(distanceVector);
+            var collisionNormal = Vector2.Normalize(distanceVector);
 
-            Vector2 relativeVelocity = ball2.Velocity - ball1.Velocity;
+            var relativeVelocity = ball2.Velocity - ball1.Velocity;
 
-            float impulseMagnitude = Vector2.Dot(relativeVelocity, collisionNormal);
+            var impulseMagnitude = Vector2.Dot(relativeVelocity, collisionNormal);
 
             if (impulseMagnitude > 0)
                 return;
 
-            Vector2 newVelocity1 = ((ball1.Mass - ball2.Mass) / (ball1.Mass + ball2.Mass)) * ball1.Velocity + ((2 * ball2.Mass) / (ball1.Mass + ball2.Mass)) * ball2.Velocity;
-            Vector2 newVelocity2 = ((2 * ball1.Mass) / (ball1.Mass + ball2.Mass)) * ball1.Velocity + ((ball2.Mass - ball1.Mass) / (ball1.Mass + ball2.Mass)) * ball2.Velocity;
+            var newVelocity1 = (ball1.Mass - ball2.Mass) / (ball1.Mass + ball2.Mass) * ball1.Velocity +
+                               2 * ball2.Mass / (ball1.Mass + ball2.Mass) * ball2.Velocity;
+            var newVelocity2 = 2 * ball1.Mass / (ball1.Mass + ball2.Mass) * ball1.Velocity +
+                               (ball2.Mass - ball1.Mass) / (ball1.Mass + ball2.Mass) * ball2.Velocity;
 
             ball1.Velocity = newVelocity1;
             ball2.Velocity = newVelocity2;

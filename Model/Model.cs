@@ -19,7 +19,7 @@ internal class Model : ModelApi, IObserver<LogicApi>
 
     public Model(LogicApi table)
     {
-        this._table = table;
+        _table = table;
     }
 
     public override int Width => _table.Width;
