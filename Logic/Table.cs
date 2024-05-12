@@ -94,7 +94,17 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
                 var rand = new Random();
                 float x = rand.Next(0 + radius, _width - radius);
                 float y = rand.Next(0 + radius, _height - radius);
-                var ball = DataApi.Instance(new Vector2(x, y), radius, 200);
+                var position = new Vector2(x, y);
+                var ball = DataApi.Instance(position, radius, 200);
+
+                bool overlaps = Balls.Any(existingBall => Vector2.Distance(existingBall.Position, position) < (existingBall.Radius + ball.Radius));
+
+                if (overlaps)
+                {
+                    i--;
+                    continue;
+                }
+
                 Balls.Add(ball);
                 Subscribe(ball);
             }
