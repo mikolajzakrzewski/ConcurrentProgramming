@@ -105,7 +105,7 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
                     
                 } while (overlaps);
 
-                var ball = DataApi.Instance(position, radius, 200);
+                var ball = DataApi.Instance(position, radius);
                 Balls.Add(ball);
                 Subscribe(ball);
             }
@@ -114,10 +114,11 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
 
     public override void Start(float velocity)
     {
+        Random random = new Random();
         lock (_ballsLock)
         {
             foreach (var ball in Balls)
-                Task.Run(() => { ball.Move(velocity); });
+                Task.Run(() => { ball.Move(velocity, random); });
         }
     }
 
@@ -172,6 +173,7 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
 
     private void BallCollision(DataApi ball1, DataApi ball2)
     {
+        int mass = 200;
         var distanceVector = ball2.Position - ball1.Position;
         float minDistance = ball1.Radius + ball2.Radius;
 
@@ -186,10 +188,10 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
             if (impulseMagnitude > 0)
                 return;
 
-            var newVelocity1 = (ball1.Mass - ball2.Mass) / (ball1.Mass + ball2.Mass) * ball1.Velocity +
-                               2 * ball2.Mass / (ball1.Mass + ball2.Mass) * ball2.Velocity;
-            var newVelocity2 = 2 * ball1.Mass / (ball1.Mass + ball2.Mass) * ball1.Velocity +
-                               (ball2.Mass - ball1.Mass) / (ball1.Mass + ball2.Mass) * ball2.Velocity;
+            var newVelocity1 = (mass - mass) / (mass + mass) * ball1.Velocity +
+                               2 * mass / (mass + mass) * ball2.Velocity;
+            var newVelocity2 = 2 * mass / (mass + mass) * ball1.Velocity +
+                               (mass - mass) / (mass + mass) * ball2.Velocity;
 
             ball1.Velocity = newVelocity1;
             ball2.Velocity = newVelocity2;

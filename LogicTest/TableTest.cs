@@ -8,8 +8,6 @@ internal class FakeDataApi : DataApi
 {
     public override int Radius => throw new NotImplementedException();
 
-    public override int Mass => throw new NotImplementedException();
-
     public override Vector2 Position => throw new NotImplementedException();
 
     public override Vector2 Velocity
@@ -18,7 +16,7 @@ internal class FakeDataApi : DataApi
         set => throw new NotImplementedException();
     }
 
-    public override Task Move(float velocity)
+    public override Task Move(float velocity, Random random)
     {
         throw new NotImplementedException();
     }
