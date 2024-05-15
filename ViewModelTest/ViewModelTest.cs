@@ -6,9 +6,9 @@ namespace ViewModelTest;
 
 internal class FakeModelApi : ModelApi
 {
-    public override int Width => 2;
+    public override int Width => 1;
 
-    public override int Height => 2;
+    public override int Height => 1;
 
     public override ObservableCollection<BallModelApi> Balls => throw new NotImplementedException();
 
@@ -44,10 +44,12 @@ public class ViewModelTest
     [TestMethod]
     public void CanStartTest()
     {
-        var viewModel = new MainWindowViewModel(new FakeModelApi());
-        viewModel.BallsAmount = 1;
-        viewModel.Velocity = 1;
-        viewModel.Radius = 1;
+        var viewModel = new MainWindowViewModel(new FakeModelApi())
+        {
+            BallsAmount = 1,
+            Velocity = 1,
+            Radius = 1
+        };
         Assert.IsTrue(viewModel.CanStart());
     }
 

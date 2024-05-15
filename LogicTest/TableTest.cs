@@ -16,11 +16,6 @@ internal class FakeDataApi : DataApi
         set => throw new NotImplementedException();
     }
 
-    public override Task Move(float velocity, Random random)
-    {
-        throw new NotImplementedException();
-    }
-
     public override IDisposable Subscribe(IObserver<DataApi> observer)
     {
         throw new NotImplementedException();
@@ -35,7 +30,7 @@ public class TableTest
     {
         var fakeDataApis = new List<FakeDataApi>();
         var balls = fakeDataApis.OfType<DataApi>().ToList();
-        var table = LogicApi.Instance(1000, 1000, balls);
+        var table = LogicApi.Instance(1, 1, balls);
         Assert.IsNotNull(table);
     }
 
@@ -50,7 +45,7 @@ public class TableTest
         fakeDataApis.Add(data2);
         fakeDataApis.Add(data3);
         var balls = fakeDataApis.OfType<DataApi>().ToList();
-        var table = LogicApi.Instance(1000, 1000, balls);
+        var table = LogicApi.Instance(1, 1, balls);
         table.ResetTable();
         Assert.AreEqual(0, table.GetBallPositions().Count);
     }

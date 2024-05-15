@@ -3,12 +3,20 @@ using System.Numerics;
 
 namespace Data;
 
-internal class Ball(Vector2 position, int radius) : DataApi, IObservable<DataApi>
+internal class Ball : DataApi, IObservable<DataApi>
 {
-    private readonly object _positionLock = new();
     private readonly List<IObserver<DataApi>> _observers = [];
+    private readonly object _positionLock = new();
     private readonly object _velocityLock = new();
+    private Vector2 _position;
     private Vector2 _velocity;
+
+    public Ball(Vector2 position, int radius, float velocity, Random random)
+    {
+        _position = position;
+        Radius = radius;
+        Task.Run(() => { _ = Move(velocity, random); });
+    }
 
     public override Vector2 Position
     {
@@ -16,7 +24,7 @@ internal class Ball(Vector2 position, int radius) : DataApi, IObservable<DataApi
         {
             lock (_positionLock)
             {
-                return position;
+                return _position;
             }
         }
     }
@@ -33,7 +41,7 @@ internal class Ball(Vector2 position, int radius) : DataApi, IObservable<DataApi
         }
     }
 
-    public override int Radius { get; } = radius;
+    public override int Radius { get; }
 
     public override IDisposable Subscribe(IObserver<DataApi> observer)
     {
@@ -41,7 +49,7 @@ internal class Ball(Vector2 position, int radius) : DataApi, IObservable<DataApi
         return new SubscriptionToken(_observers, observer);
     }
 
-    public override async Task Move(float velocity, Random random)
+    private async Task Move(float velocity, Random random)
     {
         float moveAngle = random.Next(0, 360);
         Velocity = new Vector2(velocity * (float)Math.Cos(moveAngle), velocity * (float)Math.Sin(moveAngle));
@@ -54,8 +62,7 @@ internal class Ball(Vector2 position, int radius) : DataApi, IObservable<DataApi
             stopwatch.Stop();
             var timeElapsed = (float)stopwatch.Elapsed.TotalSeconds;
             var velocityChange = Velocity * timeElapsed;
-            position += velocityChange;
-            
+            _position += velocityChange;
             NotifyObservers(this);
         }
     }

@@ -12,10 +12,8 @@ public abstract class DataApi : IObservable<DataApi>
 
     public abstract IDisposable Subscribe(IObserver<DataApi> observer);
 
-    public static DataApi Instance(Vector2 position, int radius)
+    public static DataApi Instance(Vector2 position, int radius, float velocity, Random random)
     {
-        return new Ball(position, radius);
+        return new Ball(position, radius, velocity, random);
     }
-
-    public abstract Task Move(float velocity, Random random);
 }

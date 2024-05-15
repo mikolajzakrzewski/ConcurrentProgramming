@@ -87,7 +87,7 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
 
     public override void Start(int number, int radius, float velocity)
     {
-        Random random = new Random();
+        var random = new Random();
 
         lock (_ballsLock)
         {
@@ -95,21 +95,19 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
             {
                 Vector2 position;
                 bool overlaps;
-
                 do
                 {
                     float x = random.Next(0 + radius, _width - radius);
                     float y = random.Next(0 + radius, _height - radius);
                     position = new Vector2(x, y);
 
-                    overlaps = Balls.Any(existingBall => Vector2.Distance(existingBall.Position, position) < (existingBall.Radius + radius));
-
+                    overlaps = Balls.Any(existingBall =>
+                        Vector2.Distance(existingBall.Position, position) < existingBall.Radius + radius);
                 } while (overlaps);
 
-                var ball = DataApi.Instance(position, radius);
+                var ball = DataApi.Instance(position, radius, velocity, random);
                 Balls.Add(ball);
                 Subscribe(ball);
-                Task.Run(() => { ball.Move(velocity, random); });
             }
         }
     }
@@ -165,7 +163,7 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
 
     private void BallCollision(DataApi ball1, DataApi ball2)
     {
-        int mass = 200;
+        var mass = 200;
         var distanceVector = ball2.Position - ball1.Position;
         float minDistance = ball1.Radius + ball2.Radius;
 

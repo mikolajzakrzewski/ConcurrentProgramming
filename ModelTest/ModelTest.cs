@@ -12,9 +12,9 @@ internal class FakeLogicApi : LogicApi
     public override List<List<float>> GetBallPositions()
     {
         var ballPositions = new List<List<float>>();
-        for (var i = 0; i < 5; i++)
+        for (var i = 0; i < 1; i++)
         {
-            var ballPosition = new List<float> { 3, 3 };
+            var ballPosition = new List<float> { 1, 1 };
             ballPositions.Add(ballPosition);
         }
 
@@ -51,9 +51,9 @@ public class ModelTest
     {
         var table = new FakeLogicApi();
         var model = ModelApi.Instance(table);
-        const int numberOfBalls = 5;
-        const int radius = 10;
-        model.Start(numberOfBalls, radius, 100);
+        const int numberOfBalls = 1;
+        const int radius = 1;
+        model.Start(numberOfBalls, radius, 1);
         Assert.AreEqual(numberOfBalls, model.Balls.Count);
         foreach (var ball in model.Balls) Assert.AreEqual(radius, ball.Radius);
     }
@@ -63,7 +63,7 @@ public class ModelTest
     {
         var table = new FakeLogicApi();
         var model = ModelApi.Instance(table);
-        model.Start(5, 10, 100);
+        model.Start(1, 1, 1);
         model.ResetTable();
         Assert.AreEqual(0, model.Balls.Count);
     }
