@@ -61,9 +61,9 @@ internal class Model : ModelApi, IObserver<LogicApi>
         }
     }
 
-    public override void CreateBalls(int number, int radius)
+    public override void Start(int number, int radius, float velocity)
     {
-        _table.CreateBalls(number, radius);
+        _table.Start(number, radius, velocity);
         var ballPositions = _table.GetBallPositions();
         lock (_ballsLock)
         {
@@ -73,11 +73,6 @@ internal class Model : ModelApi, IObserver<LogicApi>
                 _balls.Add(ball);
             }
         }
-    }
-
-    public override void Start(float velocity)
-    {
-        _table.Start(velocity);
     }
 
     public override void ResetTable()

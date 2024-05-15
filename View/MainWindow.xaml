@@ -18,7 +18,7 @@
             </Grid.LayoutTransform>
             <Button Content="Stop"
                     HorizontalAlignment="Left"
-                    Margin="5, 350, 0, 0"
+                    Margin="5, 300, 0, 0"
                     VerticalAlignment="Top"
                     Command="{Binding ResetButtonClicked}"
                     Background="Red"
@@ -26,19 +26,11 @@
 
             <Button Content="Start"
                     HorizontalAlignment="Left"
-                    Margin="5, 300, 0, 0"
+                    Margin="5, 250, 0, 0"
                     VerticalAlignment="Top"
                     Command="{Binding StartButtonClicked}"
                     Background="LightGreen"
                     Width="50" />
-
-            <Button Content="Create balls"
-                    HorizontalAlignment="Left"
-                    Margin="5, 250, 0, 0"
-                    VerticalAlignment="Top"
-                    Command="{Binding CreateBallsButtonClicked}"
-                    Background="PeachPuff"
-                    Width="85" />
 
             <Label Content="Podaj liczbe kul:"
                    FontSize="20"

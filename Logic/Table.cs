@@ -85,40 +85,32 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
         return ballPositions;
     }
 
-    public override void CreateBalls(int number, int radius)
+    public override void Start(int number, int radius, float velocity)
     {
+        Random random = new Random();
+
         lock (_ballsLock)
         {
             for (var i = 0; i < number; i++)
             {
-                var rand = new Random();
                 Vector2 position;
                 bool overlaps;
 
                 do
                 {
-                    float x = rand.Next(0 + radius, _width - radius);
-                    float y = rand.Next(0 + radius, _height - radius);
+                    float x = random.Next(0 + radius, _width - radius);
+                    float y = random.Next(0 + radius, _height - radius);
                     position = new Vector2(x, y);
 
                     overlaps = Balls.Any(existingBall => Vector2.Distance(existingBall.Position, position) < (existingBall.Radius + radius));
-                    
+
                 } while (overlaps);
 
                 var ball = DataApi.Instance(position, radius);
                 Balls.Add(ball);
                 Subscribe(ball);
-            }
-        }
-    }
-
-    public override void Start(float velocity)
-    {
-        Random random = new Random();
-        lock (_ballsLock)
-        {
-            foreach (var ball in Balls)
                 Task.Run(() => { ball.Move(velocity, random); });
+            }
         }
     }
 

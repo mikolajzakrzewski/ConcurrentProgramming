@@ -21,9 +21,7 @@ public abstract class ModelApi
         return new Model(table);
     }
 
-    public abstract void CreateBalls(int number, int radius);
-
-    public abstract void Start(float velocity);
+    public abstract void Start(int number, int radius, float velocity);
 
     public abstract void ResetTable();
 }
