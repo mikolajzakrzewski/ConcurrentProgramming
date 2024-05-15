@@ -9,10 +9,6 @@ internal class FakeLogicApi : LogicApi
 
     public override int Height => throw new NotImplementedException();
 
-    public override void CreateBalls(int number, int radius)
-    {
-    }
-
     public override List<List<float>> GetBallPositions()
     {
         var ballPositions = new List<List<float>>();
@@ -29,7 +25,7 @@ internal class FakeLogicApi : LogicApi
     {
     }
 
-    public override void Start(float velocity)
+    public override void Start(int radius, int number, float velocity)
     {
     }
 
@@ -51,23 +47,23 @@ public class ModelTest
     }
 
     [TestMethod]
-    public void TestCreateBalls()
+    public void StartTest()
     {
         var table = new FakeLogicApi();
         var model = ModelApi.Instance(table);
         const int numberOfBalls = 5;
         const int radius = 10;
-        model.CreateBalls(numberOfBalls, radius);
+        model.Start(numberOfBalls, radius, 100);
         Assert.AreEqual(numberOfBalls, model.Balls.Count);
         foreach (var ball in model.Balls) Assert.AreEqual(radius, ball.Radius);
     }
 
     [TestMethod]
-    public void TestResetTable()
+    public void ResetTableTest()
     {
         var table = new FakeLogicApi();
         var model = ModelApi.Instance(table);
-        model.CreateBalls(5, 10);
+        model.Start(5, 10, 100);
         model.ResetTable();
         Assert.AreEqual(0, model.Balls.Count);
     }

@@ -88,7 +88,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
 
     public bool CanStart()
     {
-        return _startButtonEnabled && BallsAmount > 0 && Radius > 0;
+        return _startButtonEnabled && BallsAmount > 0 && Radius > 0 && Velocity > 0;
     }
 
     public bool CanReset()

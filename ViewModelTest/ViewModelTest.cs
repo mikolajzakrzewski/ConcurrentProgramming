@@ -12,11 +12,7 @@ internal class FakeModelApi : ModelApi
 
     public override ObservableCollection<BallModelApi> Balls => throw new NotImplementedException();
 
-    public override void CreateBalls(int number, int radius)
-    {
-    }
-
-    public override void Start(float velocity)
+    public override void Start(int number, int radius, float velocity)
     {
     }
 
@@ -46,34 +42,22 @@ internal class FakeBallModelApi : BallModelApi
 public class ViewModelTest
 {
     [TestMethod]
-    public void TestCanCreateBalls()
+    public void CanStartTest()
     {
         var viewModel = new MainWindowViewModel(new FakeModelApi());
-        Assert.IsFalse(viewModel.CanCreateBalls());
-        viewModel.BallsAmount = 2;
-        viewModel.Radius = 2;
-        Assert.IsTrue(viewModel.CanCreateBalls());
-        BallModelApi fakeBallModelApi = new FakeBallModelApi();
-        viewModel.Balls.Add(fakeBallModelApi);
-        Assert.IsFalse(viewModel.CanCreateBalls());
-    }
-
-    [TestMethod]
-    public void TestCanStart()
-    {
-        var viewModel = new MainWindowViewModel(new FakeModelApi());
-        BallModelApi fakeBallModelApi = new FakeBallModelApi();
-        viewModel.Balls.Add(fakeBallModelApi);
-        viewModel.Velocity = 5;
+        viewModel.BallsAmount = 1;
+        viewModel.Velocity = 1;
+        viewModel.Radius = 1;
         Assert.IsTrue(viewModel.CanStart());
     }
 
     [TestMethod]
-    public void TestCanReset()
+    public void CanResetTest()
     {
         var viewModel = new MainWindowViewModel(new FakeModelApi());
         BallModelApi fakeBallModelApi = new FakeBallModelApi();
         viewModel.Balls.Add(fakeBallModelApi);
+        viewModel.Start(1, 1, 1);
         Assert.IsTrue(viewModel.CanReset());
         viewModel.Balls.Clear();
         Assert.IsFalse(viewModel.CanReset());
