@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodel="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
-        Title="Balls" Height="550" Width="920">
+        Title="Balls movement simulator" Height="550" Width="920">
 
     <Window.DataContext>
         <viewmodel:MainWindowViewModel />
@@ -32,19 +32,19 @@
                     Background="LightGreen"
                     Width="50" />
 
-            <Label Content="Podaj liczbe kul:"
+            <Label Content="Enter balls number:"
                    FontSize="20"
                    HorizontalAlignment="Left"
                    Margin="5"
                    VerticalAlignment="Top" />
 
-            <Label Content="Podaj prędkość:"
+            <Label Content="Enter balls velocity:"
                    FontSize="20"
                    HorizontalAlignment="Left"
                    Margin="5,84,0,0"
                    VerticalAlignment="Top" />
 
-            <Label Content="Podaj promień:"
+            <Label Content="Enter balls radius:"
                    FontSize="20"
                    HorizontalAlignment="Left"
                    Margin="5,160,0,0"
@@ -53,7 +53,7 @@
             <TextBox FontSize="20"
                      HorizontalAlignment="Left"
                      Margin="10, 200, 0, 0"
-                     Text="{Binding Radius}"
+                     Text="{Binding Radius, UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="Wrap"
                      VerticalAlignment="Top"
                      Width="120" />
@@ -61,7 +61,7 @@
             <TextBox FontSize="20"
                      HorizontalAlignment="Left"
                      Margin="10, 125"
-                     Text="{Binding Velocity}"
+                     Text="{Binding Velocity, UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="Wrap"
                      VerticalAlignment="Top"
                      Width="120" />
@@ -69,7 +69,7 @@
             <TextBox FontSize="20"
                      HorizontalAlignment="Left"
                      Margin="10, 50"
-                     Text="{Binding BallsAmount}"
+                     Text="{Binding BallsAmount, UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="Wrap"
                      VerticalAlignment="Top"
                      Width="120" />
