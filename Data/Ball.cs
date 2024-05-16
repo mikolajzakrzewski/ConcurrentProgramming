@@ -7,7 +7,9 @@ internal class Ball : DataApi, IObservable<DataApi>
 {
     private readonly List<IObserver<DataApi>> _observers = [];
     private readonly object _positionLock = new();
+    private readonly object _stopLock = new();
     private readonly object _velocityLock = new();
+    private bool _isStopped;
     private Vector2 _position;
     private Vector2 _velocity;
 
@@ -15,7 +17,7 @@ internal class Ball : DataApi, IObservable<DataApi>
     {
         _position = position;
         Radius = radius;
-        Task.Run(() => { _ = Move(velocity, random); });
+        Task.Run(() => Move(velocity, random));
     }
 
     public override Vector2 Position
@@ -31,7 +33,13 @@ internal class Ball : DataApi, IObservable<DataApi>
 
     public override Vector2 Velocity
     {
-        get => _velocity;
+        get
+        {
+            lock (_velocityLock)
+            {
+                return _velocity;
+            }
+        }
         set
         {
             lock (_velocityLock)
@@ -49,7 +57,7 @@ internal class Ball : DataApi, IObservable<DataApi>
         return new SubscriptionToken(_observers, observer);
     }
 
-    private async Task Move(float velocity, Random random)
+    private async void Move(float velocity, Random random)
     {
         float moveAngle = random.Next(0, 360);
         Velocity = new Vector2(velocity * (float)Math.Cos(moveAngle), velocity * (float)Math.Sin(moveAngle));
@@ -62,8 +70,24 @@ internal class Ball : DataApi, IObservable<DataApi>
             stopwatch.Stop();
             var timeElapsed = (float)stopwatch.Elapsed.TotalSeconds;
             var velocityChange = Velocity * timeElapsed;
-            _position += velocityChange;
+            lock (_positionLock)
+            {
+                _position += velocityChange;
+            }
+
             NotifyObservers(this);
+            lock (_stopLock)
+            {
+                if (_isStopped) break;
+            }
+        }
+    }
+
+    public override void Stop()
+    {
+        lock (_stopLock)
+        {
+            _isStopped = true;
         }
     }
 

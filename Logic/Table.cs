@@ -62,9 +62,8 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
         lock (_ballsLock)
         {
             foreach (var ball1 in Balls)
-            foreach (var ball2 in Balls)
-                if (ball1 != ball2)
-                    BallCollision(ball1, ball2);
+                if (ball1 != value)
+                    BallCollision(ball1, value);
         }
 
         NotifyObservers(this);
@@ -116,6 +115,7 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
     {
         lock (_ballsLock)
         {
+            foreach (var ball in Balls) ball.Stop();
             Balls.Clear();
         }
     }
@@ -161,31 +161,29 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
         ball.Velocity = velocity;
     }
 
-    private void BallCollision(DataApi ball1, DataApi ball2)
+    private static void BallCollision(DataApi ball1, DataApi ball2)
     {
-        var mass = 200;
+        const int mass = 200;
         var distanceVector = ball2.Position - ball1.Position;
         float minDistance = ball1.Radius + ball2.Radius;
 
-        if (distanceVector.LengthSquared() < minDistance * minDistance)
-        {
-            var collisionNormal = Vector2.Normalize(distanceVector);
+        if (!(distanceVector.LengthSquared() < minDistance * minDistance)) return;
+        var collisionNormal = Vector2.Normalize(distanceVector);
 
-            var relativeVelocity = ball2.Velocity - ball1.Velocity;
+        var relativeVelocity = ball2.Velocity - ball1.Velocity;
 
-            var impulseMagnitude = Vector2.Dot(relativeVelocity, collisionNormal);
+        var impulseMagnitude = Vector2.Dot(relativeVelocity, collisionNormal);
 
-            if (impulseMagnitude > 0)
-                return;
+        if (impulseMagnitude > 0)
+            return;
 
-            var newVelocity1 = (mass - mass) / (mass + mass) * ball1.Velocity +
-                               2 * mass / (mass + mass) * ball2.Velocity;
-            var newVelocity2 = 2 * mass / (mass + mass) * ball1.Velocity +
-                               (mass - mass) / (mass + mass) * ball2.Velocity;
+        var newVelocity1 = (mass - mass) / (mass + mass) * ball1.Velocity +
+                           2 * mass / (mass + mass) * ball2.Velocity;
+        var newVelocity2 = 2 * mass / (mass + mass) * ball1.Velocity +
+                           (mass - mass) / (mass + mass) * ball2.Velocity;
 
-            ball1.Velocity = newVelocity1;
-            ball2.Velocity = newVelocity2;
-        }
+        ball1.Velocity = newVelocity1;
+        ball2.Velocity = newVelocity2;
     }
 
     public void NotifyObservers(LogicApi table)
