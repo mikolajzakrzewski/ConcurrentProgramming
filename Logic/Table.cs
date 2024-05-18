@@ -7,7 +7,7 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
 {
     private readonly object _ballsLock = new();
     private readonly int _height;
-    private readonly List<IObserver<LogicApi>>? _observers;
+    private readonly List<IObserver<LogicApi>> _observers = [];
     private readonly int _width;
     private IDisposable? _subscriptionToken;
 
