@@ -10,9 +10,9 @@ public abstract class DataApi : IObservable<DataApi>
 
     public abstract int Radius { get; }
 
-    public abstract IDisposable Subscribe(IObserver<DataApi> observer);
+    public abstract bool IsStopped { set; }
 
-    public abstract void Stop();
+    public abstract IDisposable Subscribe(IObserver<DataApi> observer);
 
     public static DataApi Instance(Vector2 position, int radius, float velocity, Random random)
     {

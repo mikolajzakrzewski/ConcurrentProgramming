@@ -37,7 +37,7 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
 
     public override int Height => _height;
 
-    public List<DataApi> Balls { get; }
+    private List<DataApi> Balls { get; }
 
     public override IDisposable Subscribe(IObserver<LogicApi> observer)
     {
@@ -115,14 +115,19 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
     {
         lock (_ballsLock)
         {
-            foreach (var ball in Balls) ball.Stop();
+            foreach (var ball in Balls) ball.IsStopped = true;
             Balls.Clear();
+        }
+
+        lock (_ballsLock)
+        {
+            foreach (var _ in Balls) Unsubscribe();
         }
     }
 
-    public void Subscribe(IObservable<DataApi> provider)
+    private void Subscribe(DataApi provider)
     {
-        if (provider != null) _subscriptionToken = provider.Subscribe(this);
+        _subscriptionToken = provider.Subscribe(this);
     }
 
     public void Unsubscribe()
@@ -186,17 +191,17 @@ internal class Table : LogicApi, IObserver<DataApi>, IObservable<LogicApi>
         ball2.Velocity = newVelocity2;
     }
 
-    public void NotifyObservers(LogicApi table)
+    private void NotifyObservers(LogicApi table)
     {
         foreach (var observer in _observers) observer.OnNext(table);
     }
 }
 
-public class SubscriptionToken(ICollection<IObserver<LogicApi>> observers, IObserver<LogicApi> observer)
+internal class SubscriptionToken(ICollection<IObserver<LogicApi>> observers, IObserver<LogicApi> observer)
     : IDisposable
 {
     public void Dispose()
     {
-        if (observer != null && observers.Contains(observer)) observers.Remove(observer);
+        observers.Remove(observer);
     }
 }

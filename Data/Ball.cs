@@ -51,6 +51,17 @@ internal class Ball : DataApi, IObservable<DataApi>
 
     public override int Radius { get; }
 
+    public override bool IsStopped
+    {
+        set
+        {
+            lock (_stopLock)
+            {
+                _isStopped = value;
+            }
+        }
+    }
+
     public override IDisposable Subscribe(IObserver<DataApi> observer)
     {
         if (!_observers.Contains(observer)) _observers.Add(observer);
@@ -83,25 +94,17 @@ internal class Ball : DataApi, IObservable<DataApi>
         }
     }
 
-    public override void Stop()
-    {
-        lock (_stopLock)
-        {
-            _isStopped = true;
-        }
-    }
-
-    public void NotifyObservers(DataApi ball)
+    private void NotifyObservers(DataApi ball)
     {
         foreach (var observer in _observers) observer.OnNext(ball);
     }
 }
 
-public class SubscriptionToken(ICollection<IObserver<DataApi>> observers, IObserver<DataApi> observer)
+internal class SubscriptionToken(ICollection<IObserver<DataApi>> observers, IObserver<DataApi> observer)
     : IDisposable
 {
     public void Dispose()
     {
-        if (observer != null && observers.Contains(observer)) observers.Remove(observer);
+        observers.Remove(observer);
     }
 }

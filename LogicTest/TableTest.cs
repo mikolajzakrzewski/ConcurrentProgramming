@@ -6,8 +6,6 @@ namespace LogicTest;
 
 internal class FakeDataApi : DataApi
 {
-    public override int Radius => throw new NotImplementedException();
-
     public override Vector2 Position => throw new NotImplementedException();
 
     public override Vector2 Velocity
@@ -16,8 +14,11 @@ internal class FakeDataApi : DataApi
         set => throw new NotImplementedException();
     }
 
-    public override void Stop()
+    public override int Radius => throw new NotImplementedException();
+
+    public override bool IsStopped
     {
+        set { }
     }
 
     public override IDisposable Subscribe(IObserver<DataApi> observer)

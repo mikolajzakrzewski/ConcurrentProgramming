@@ -8,28 +8,27 @@ public class MainWindowViewModel : INotifyPropertyChanged
 {
     private readonly ModelApi _modelApi;
 
-    public ObservableCollection<BallModelApi> _balls;
-    public int _ballsAmount;
-    public int _radius;
+    private int _ballsAmount;
+    private int _radius;
     private bool _startButtonEnabled = true;
-    public float _velocity;
+    private float _velocity;
 
     public MainWindowViewModel()
     {
         _modelApi = ModelApi.Instance();
         Width = _modelApi.Width;
         Height = _modelApi.Height;
-        _balls = _modelApi.Balls;
+        Balls = _modelApi.Balls;
         StartButtonClicked = new RelayCommand(o => { Start(BallsAmount, Radius, Velocity); }, o => CanStart());
         ResetButtonClicked = new RelayCommand(o => { ResetTable(); }, o => CanReset());
     }
 
-    public MainWindowViewModel(ModelApi modelAPI)
+    public MainWindowViewModel(ModelApi modelApi)
     {
-        _modelApi = modelAPI;
-        Width = modelAPI.Width;
-        Height = modelAPI.Height;
-        _balls = [];
+        _modelApi = modelApi;
+        Width = modelApi.Width;
+        Height = modelApi.Height;
+        Balls = [];
         StartButtonClicked = new RelayCommand(o => { Start(BallsAmount, Radius, Velocity); }, o => CanStart());
         ResetButtonClicked = new RelayCommand(o => { ResetTable(); }, o => CanReset());
     }
@@ -41,7 +40,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
 
     public int Height { get; }
 
-    public ObservableCollection<BallModelApi> Balls => _balls;
+    public ObservableCollection<BallModelApi> Balls { get; }
 
     public int BallsAmount
     {

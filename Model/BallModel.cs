@@ -29,7 +29,7 @@ internal class BallModel(Vector2 position, int radius) : BallModelApi, INotifyPr
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public void OnPropertyChanged(string propertyName)
+    private void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

@@ -9,7 +9,6 @@ internal class Model : ModelApi, IObserver<LogicApi>
     private readonly ObservableCollection<BallModelApi> _balls = [];
     private readonly object _ballsLock = new();
     private readonly LogicApi _table;
-    private IDisposable? _subscriptionToken;
 
     public Model()
     {
@@ -85,13 +84,8 @@ internal class Model : ModelApi, IObserver<LogicApi>
         _table.ResetTable();
     }
 
-    public void Subscribe(IObservable<LogicApi> provider)
+    private void Subscribe(LogicApi provider)
     {
-        if (provider != null) _subscriptionToken = provider.Subscribe(this);
-    }
-
-    public void Unsubscribe()
-    {
-        _subscriptionToken?.Dispose();
+        provider.Subscribe(this);
     }
 }
