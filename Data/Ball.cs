@@ -14,13 +14,21 @@ internal class Ball : DataApi, IObservable<DataApi>
     private Vector2 _velocity;
     private Logger _logger;
     private readonly object _loggerLock = new();
+    private static int _nextBallId = 1;
+    private int _id;
 
     public Ball(Vector2 position, int radius, float velocity, Random random)
     {
         _position = position;
-        _logger = new Logger();
+        _id = _nextBallId++;
+        _logger = Logger.Instance();
         Radius = radius;
         Task.Run(() => Move(velocity, random));
+    }
+
+    public override int Id
+    {
+        get => _id;
     }
 
     public override Vector2 Position

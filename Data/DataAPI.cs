@@ -4,6 +4,7 @@ namespace Data;
 
 public abstract class DataApi : IObservable<DataApi>
 {
+    public abstract int Id { get; }
     public abstract Vector2 Position { get; }
 
     public abstract Vector2 Velocity { get; set; }

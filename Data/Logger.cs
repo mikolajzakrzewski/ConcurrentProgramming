@@ -5,16 +5,31 @@ namespace Data
 {
     internal class Logger
     {
-        ConcurrentQueue<BallDto> _queue;
+        private static Logger _instance;
+        private static readonly object _loggerLock = new object();
+        private ConcurrentQueue<BallDto> _queue;
+
         public Logger() 
         { 
             _queue = new ConcurrentQueue<BallDto>();
             Write();
         }
 
+        public static Logger Instance()
+        {
+            lock (_loggerLock)
+            {
+                if (_instance == null)
+                {
+                    _instance = new Logger();
+                }
+                return _instance;
+            }
+        }
+
         public void Add(DataApi ball, string date) 
         { 
-            _queue.Enqueue(new BallDto(ball.Position, ball.Velocity, date));
+            _queue.Enqueue(new BallDto(ball.Id, ball.Position, ball.Velocity, date));
         }
 
         private void Write() 
