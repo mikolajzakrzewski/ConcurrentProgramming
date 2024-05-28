@@ -21,6 +21,8 @@ internal class FakeDataApi : DataApi
         set { }
     }
 
+    public override int Id => throw new NotImplementedException();
+
     public override IDisposable Subscribe(IObserver<DataApi> observer)
     {
         throw new NotImplementedException();
