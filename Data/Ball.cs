@@ -70,27 +70,41 @@ internal class Ball : DataApi, IObservable<DataApi>
 
     private async void Move(float velocity, Random random)
     {
+        Stopwatch stopwatch = new Stopwatch();
         float moveAngle = random.Next(0, 360);
         Velocity = new Vector2(velocity * (float)Math.Cos(moveAngle), velocity * (float)Math.Sin(moveAngle));
-        const float timeOfTravel = 1f / 60f;
+
+        stopwatch.Start();
+        float lastUpdateTime = 0f;
+
         while (true)
         {
-            Stopwatch stopwatch = new();
-            stopwatch.Start();
-            await Task.Delay(TimeSpan.FromSeconds(timeOfTravel));
-            stopwatch.Stop();
-            var timeElapsed = (float)stopwatch.Elapsed.TotalSeconds;
-            var velocityChange = Velocity * timeElapsed;
-            lock (_positionLock)
+            float currentTime = (float)stopwatch.Elapsed.TotalSeconds;
+            float elapsedSinceLastUpdate = currentTime - lastUpdateTime;
+
+            if (elapsedSinceLastUpdate >= 1f / 60f)
             {
-                _position += velocityChange;
+                lock (_positionLock)
+                {
+                    _position += Velocity * elapsedSinceLastUpdate;
+                }
+
+                NotifyObservers(this);
+
+                lastUpdateTime = currentTime;
             }
 
-            NotifyObservers(this);
             lock (_stopLock)
             {
-                if (_isStopped) break;
+                if (_isStopped)
+                {
+                    stopwatch.Stop();
+                    break;
+                }
             }
+
+            //TODO: Ogarnąć czy może tak być.
+            await Task.Yield();
         }
     }
 
