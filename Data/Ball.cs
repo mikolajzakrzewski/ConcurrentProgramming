@@ -12,10 +12,13 @@ internal class Ball : DataApi, IObservable<DataApi>
     private bool _isStopped;
     private Vector2 _position;
     private Vector2 _velocity;
+    private Logger _logger;
+    private readonly object _loggerLock = new();
 
     public Ball(Vector2 position, int radius, float velocity, Random random)
     {
         _position = position;
+        _logger = new Logger();
         Radius = radius;
         Task.Run(() => Move(velocity, random));
     }
@@ -92,6 +95,11 @@ internal class Ball : DataApi, IObservable<DataApi>
                 NotifyObservers(this);
 
                 lastUpdateTime = currentTime;
+
+                lock (_loggerLock) 
+                {
+                    _logger.Add(this, DateTime.Now.ToString());
+                }
             }
 
             lock (_stopLock)
