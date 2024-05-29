@@ -9,7 +9,7 @@ namespace Data
         public float PositionY { get; }
         public float VelocityX { get; }
         public float VelocityY { get; }
-        public string date {  get; }
+        public string Date {  get; }
 
         public BallDto(int id, Vector2 position, Vector2 velocity, string date)
         {
@@ -18,7 +18,7 @@ namespace Data
             PositionY = position.Y;
             VelocityX = velocity.X;
             VelocityY = velocity.Y;
-            this.date = date;
+            Date = date;
         }
     }
 }

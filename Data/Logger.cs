@@ -28,7 +28,7 @@ namespace Data
         }
 
         public void Add(DataApi ball, string date) 
-        { 
+        {
             _queue.Enqueue(new BallDto(ball.Id, ball.Position, ball.Velocity, date));
         }
 
