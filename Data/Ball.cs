@@ -92,8 +92,9 @@ internal class Ball : DataApi, IObservable<DataApi>
         {
             float currentTime = (float)stopwatch.Elapsed.TotalSeconds;
             float elapsedSinceLastUpdate = currentTime - lastUpdateTime;
+            const float timeOfTravel = 1f / 60f;
 
-            if (elapsedSinceLastUpdate >= 1f / 60f)
+            if (elapsedSinceLastUpdate >= timeOfTravel)
             {
                 lock (_positionLock)
                 {
@@ -119,8 +120,7 @@ internal class Ball : DataApi, IObservable<DataApi>
                 }
             }
 
-            //TODO: Ogarnąć czy może tak być.
-            await Task.Yield();
+            await Task.Delay(TimeSpan.FromSeconds(timeOfTravel));
         }
     }
 

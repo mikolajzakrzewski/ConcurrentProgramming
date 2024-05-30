@@ -5,9 +5,11 @@ namespace Data
 {
     internal class Logger
     {
-        private static Logger _instance;
+        private static Logger? _instance;
         private static readonly object _loggerLock = new object();
         private ConcurrentQueue<BallDto> _queue;
+        private readonly int _maxBufferSize = 1000;
+        private bool _bufferOverflowed = false;
 
         public Logger() 
         { 
@@ -30,6 +32,11 @@ namespace Data
         public void Add(DataApi ball, string date) 
         {
             _queue.Enqueue(new BallDto(ball.Id, ball.Position, ball.Velocity, date));
+
+            if (_queue.Count >= _maxBufferSize)
+            {
+                _bufferOverflowed = true;
+            }
         }
 
         private void Write() 
@@ -41,8 +48,15 @@ namespace Data
                     while (_queue.TryDequeue(out BallDto dto))
                     {
                         string log = JsonSerializer.Serialize(dto);
-                        streamWriter.WriteLine(log);
+                        await streamWriter.WriteLineAsync(log);
                     }
+
+                    if (_bufferOverflowed)
+                    {
+                        await streamWriter.WriteLineAsync("Buffer overflow occurred!");
+                        _bufferOverflowed = false;
+                    }
+
                     await streamWriter.FlushAsync();
                 }
             });
