@@ -12,7 +12,7 @@ internal class Logger
     private readonly ConcurrentQueue<BallDto> _queue;
     private bool _bufferOverflowed;
 
-    public Logger()
+    private Logger()
     {
         _queue = new ConcurrentQueue<BallDto>();
         Task.Run(Write);
