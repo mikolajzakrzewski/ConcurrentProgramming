@@ -1,65 +1,59 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
 
-namespace Data
+namespace Data;
+
+internal class Logger
 {
-    internal class Logger
+    private const int MaxBufferSize = 10;
+    private static Logger? _instance;
+    private static readonly object LoggerLock = new();
+    private readonly ConcurrentQueue<BallDto> _queue;
+    private bool _bufferOverflowed;
+
+    public Logger()
     {
-        private static Logger? _instance;
-        private static readonly object _loggerLock = new object();
-        private ConcurrentQueue<BallDto> _queue;
-        private readonly int _maxBufferSize = 1000;
-        private bool _bufferOverflowed = false;
+        _queue = new ConcurrentQueue<BallDto>();
+        Task.Run(Write);
+    }
 
-        public Logger() 
-        { 
-            _queue = new ConcurrentQueue<BallDto>();
-            Write();
-        }
-
-        public static Logger Instance()
+    public static Logger Instance()
+    {
+        lock (LoggerLock)
         {
-            lock (_loggerLock)
-            {
-                if (_instance == null)
-                {
-                    _instance = new Logger();
-                }
-                return _instance;
-            }
+            if (_instance != null) return _instance;
+            _instance = new Logger();
+            return _instance;
         }
+    }
 
-        public void Add(DataApi ball, string date) 
-        {
+    public void Add(DataApi ball, string date)
+    {
+        // TODO: Fix the buffer overflow issue
+        if (_queue.Count >= MaxBufferSize) _bufferOverflowed = true;
+        else
             _queue.Enqueue(new BallDto(ball.Id, ball.Position, ball.Velocity, date));
+    }
 
-            if (_queue.Count >= _maxBufferSize)
-            {
-                _bufferOverflowed = true;
-            }
-        }
-
-        private void Write() 
+    private async void Write()
+    {
+        await using StreamWriter streamWriter = new("log.json");
+        while (true)
         {
-            Task.Run(async () => {
-                using StreamWriter streamWriter = new StreamWriter("log.json");
-                while (true) 
-                {
-                    while (_queue.TryDequeue(out BallDto dto))
-                    {
-                        string log = JsonSerializer.Serialize(dto);
-                        await streamWriter.WriteLineAsync(log);
-                    }
+            while (_queue.TryDequeue(out var dto))
+            {
+                var log = JsonSerializer.Serialize(dto);
+                await streamWriter.WriteLineAsync(log);
+            }
 
-                    if (_bufferOverflowed)
-                    {
-                        await streamWriter.WriteLineAsync("Buffer overflow occurred!");
-                        _bufferOverflowed = false;
-                    }
+            // TODO: Fix the buffer overflow issue
+            if (_bufferOverflowed)
+            {
+                await streamWriter.WriteLineAsync("Buffer overflow occurred!");
+                _bufferOverflowed = false;
+            }
 
-                    await streamWriter.FlushAsync();
-                }
-            });
+            await streamWriter.FlushAsync();
         }
     }
 }

@@ -8,7 +8,6 @@ internal class Ball : DataApi, IObservable<DataApi>
 {
     private static int _nextBallId = 1;
     private readonly Logger _logger;
-    private readonly object _loggerLock = new();
     private readonly List<IObserver<DataApi>> _observers = [];
     private readonly object _positionLock = new();
     private readonly object _stopLock = new();
@@ -97,10 +96,7 @@ internal class Ball : DataApi, IObservable<DataApi>
                 }
 
                 NotifyObservers(this);
-                lock (_loggerLock)
-                {
-                    _logger.Add(this, DateTime.Now.ToString(CultureInfo.CurrentCulture));
-                }
+                _logger.Add(this, DateTime.Now.ToString(CultureInfo.CurrentCulture));
             }
 
             lock (_stopLock)
