@@ -108,7 +108,7 @@ internal class Ball : DataApi, IObservable<DataApi>
                 }
             }
 
-            await Task.Delay(TimeSpan.FromSeconds(elapsedSinceLastUpdate));
+            await Task.Delay(TimeSpan.FromSeconds(timeOfTravel));
         }
     }
 

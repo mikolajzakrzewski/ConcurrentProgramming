@@ -5,9 +5,10 @@ namespace Data;
 
 internal class Logger
 {
-    private const int MaxBufferSize = 10;
+    private const int MaxBufferSize = 1000;
     private static Logger? _instance;
     private static readonly object LoggerLock = new();
+    private static readonly object OverflowLock = new();
     private readonly ConcurrentQueue<BallDto> _queue;
     private bool _bufferOverflowed;
 
@@ -29,10 +30,16 @@ internal class Logger
 
     public void Add(DataApi ball, string date)
     {
-        // TODO: Fix the buffer overflow issue
-        if (_queue.Count >= MaxBufferSize) _bufferOverflowed = true;
-        else
-            _queue.Enqueue(new BallDto(ball.Id, ball.Position, ball.Velocity, date));
+        Task.Run(() =>
+        {
+            if (_queue.Count >= MaxBufferSize)
+                lock (OverflowLock)
+                {
+                    _bufferOverflowed = true;
+                }
+            else
+                _queue.Enqueue(new BallDto(ball.Id, ball.Position, ball.Velocity, date));
+        });
     }
 
     private async void Write()
@@ -46,12 +53,17 @@ internal class Logger
                 await streamWriter.WriteLineAsync(log);
             }
 
-            // TODO: Fix the buffer overflow issue
-            if (_bufferOverflowed)
+            var overflowOccured = false;
+            lock (OverflowLock)
             {
-                await streamWriter.WriteLineAsync("Buffer overflow occurred!");
-                _bufferOverflowed = false;
+                if (_bufferOverflowed)
+                {
+                    overflowOccured = true;
+                    _bufferOverflowed = false;
+                }
             }
+
+            if (overflowOccured) await streamWriter.WriteLineAsync("Buffer overflow occurred!");
 
             await streamWriter.FlushAsync();
         }
