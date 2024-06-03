@@ -28,7 +28,7 @@ internal class Logger
         }
     }
 
-    public void Add(DataApi ball, string date)
+    public void Add(DataApi ball, DateTime date)
     {
         Task.Run(() =>
         {

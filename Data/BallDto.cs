@@ -4,7 +4,7 @@ namespace Data;
 
 internal class BallDto
 {
-    public BallDto(int id, Vector2 position, Vector2 velocity, string date)
+    public BallDto(int id, Vector2 position, Vector2 velocity, DateTime date)
     {
         BallId = id;
         PositionX = position.X;
@@ -19,5 +19,5 @@ internal class BallDto
     public float PositionY { get; }
     public float VelocityX { get; }
     public float VelocityY { get; }
-    public string Date { get; }
+    public DateTime Date { get; }
 }

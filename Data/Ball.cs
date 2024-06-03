@@ -96,7 +96,7 @@ internal class Ball : DataApi, IObservable<DataApi>
                 }
 
                 NotifyObservers(this);
-                _logger.Add(this, DateTime.Now.ToString(CultureInfo.CurrentCulture));
+                _logger.Add(this, DateTime.Now);
             }
 
             lock (_stopLock)
