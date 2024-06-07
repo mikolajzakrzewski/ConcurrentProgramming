@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Text;
 using System.Text.Json;
 
 namespace Data;
@@ -9,12 +10,12 @@ internal class Logger
     private static Logger? _instance;
     private static readonly object LoggerLock = new();
     private static readonly object OverflowLock = new();
-    private readonly ConcurrentQueue<BallDto> _queue;
+    private readonly BlockingCollection<BallDto> _queue;
     private bool _bufferOverflowed;
 
     private Logger()
     {
-        _queue = new ConcurrentQueue<BallDto>();
+        _queue = new BlockingCollection<BallDto>(new ConcurrentQueue<BallDto>(), MaxBufferSize);
         Task.Run(Write);
     }
 
@@ -32,27 +33,18 @@ internal class Logger
     {
         Task.Run(() =>
         {
-            if (_queue.Count >= MaxBufferSize)
-                lock (OverflowLock)
-                {
-                    _bufferOverflowed = true;
-                }
-            else
-                _queue.Enqueue(new BallDto(ball.Id, ball.Position, ball.Velocity, date));
+            var addSucceeded = _queue.TryAdd(new BallDto(ball.Id, ball.Position, ball.Velocity, date));
+            if (addSucceeded) return;
+            lock (OverflowLock)
+                _bufferOverflowed = true;
         });
     }
 
     private async void Write()
     {
-        await using StreamWriter streamWriter = new("log.json");
+        await using StreamWriter streamWriter = new("log.json", append: false, encoding: Encoding.UTF8);
         while (true)
         {
-            while (_queue.TryDequeue(out var dto))
-            {
-                var log = JsonSerializer.Serialize(dto);
-                await streamWriter.WriteLineAsync(log);
-            }
-
             var overflowOccured = false;
             lock (OverflowLock)
             {
@@ -65,6 +57,9 @@ internal class Logger
 
             if (overflowOccured) await streamWriter.WriteLineAsync("Buffer overflow occurred!");
 
+            var dto = _queue.Take();
+            var log = JsonSerializer.Serialize(dto);
+            await streamWriter.WriteLineAsync(log);
             await streamWriter.FlushAsync();
         }
     }
