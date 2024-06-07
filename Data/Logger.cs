@@ -43,6 +43,11 @@ internal class Logger
     private async void Write()
     {
         await using StreamWriter streamWriter = new("log.json", append: false, encoding: Encoding.UTF8);
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true
+        };
+
         while (true)
         {
             var overflowOccured = false;
@@ -58,7 +63,7 @@ internal class Logger
             if (overflowOccured) await streamWriter.WriteLineAsync("Buffer overflow occurred!");
 
             var dto = _queue.Take();
-            var log = JsonSerializer.Serialize(dto);
+            var log = JsonSerializer.Serialize(dto, options);
             await streamWriter.WriteLineAsync(log);
             await streamWriter.FlushAsync();
         }
