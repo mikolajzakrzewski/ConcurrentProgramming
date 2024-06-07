@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
+using System.Globalization;
 using System.Text;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace Data;
 
@@ -36,19 +37,22 @@ internal class Logger
             var addSucceeded = _queue.TryAdd(new BallDto(ball.Id, ball.Position, ball.Velocity, date));
             if (addSucceeded) return;
             lock (OverflowLock)
+            {
                 _bufferOverflowed = true;
+            }
         });
     }
 
     private async void Write()
     {
-        await using StreamWriter streamWriter = new("log.json", append: false, encoding: Encoding.UTF8);
-        var options = new JsonSerializerOptions
+        await using StreamWriter streamWriter = new("log.json", false, Encoding.UTF8);
+        var settings = new JsonSerializerSettings
         {
-            WriteIndented = true
+            Culture = CultureInfo.InvariantCulture,
+            Formatting = Formatting.Indented
         };
 
-        while (true)
+        while (!_queue.IsCompleted)
         {
             var overflowOccured = false;
             lock (OverflowLock)
@@ -63,7 +67,7 @@ internal class Logger
             if (overflowOccured) await streamWriter.WriteLineAsync("Buffer overflow occurred!");
 
             var dto = _queue.Take();
-            var log = JsonSerializer.Serialize(dto, options);
+            var log = JsonConvert.SerializeObject(dto, settings);
             await streamWriter.WriteLineAsync(log);
             await streamWriter.FlushAsync();
         }
