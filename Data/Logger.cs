@@ -34,7 +34,17 @@ internal class Logger
     {
         Task.Run(() =>
         {
-            var addSucceeded = _queue.TryAdd(new BallDto(ball.Id, ball.Position, ball.Velocity, date));
+            bool addSucceeded;
+            try
+            {
+                addSucceeded = _queue.TryAdd(new BallDto(ball.Id, ball.Position, ball.Velocity, date));
+            }
+            catch (Exception)
+            {
+                // The BlockingCollection<BallDto> has been disposed or marked as complete
+                return;
+            }
+
             if (addSucceeded) return;
             lock (OverflowLock)
             {
@@ -66,7 +76,17 @@ internal class Logger
 
             if (overflowOccured) await streamWriter.WriteLineAsync("Buffer overflow occurred!");
 
-            var dto = _queue.Take();
+            BallDto dto;
+            try
+            {
+                dto = _queue.Take();
+            }
+            catch (Exception)
+            {
+                // The BlockingCollection<BallDto> has been disposed or marked as complete
+                break;
+            }
+
             var log = JsonConvert.SerializeObject(dto, settings);
             await streamWriter.WriteLineAsync(log);
             await streamWriter.FlushAsync();
